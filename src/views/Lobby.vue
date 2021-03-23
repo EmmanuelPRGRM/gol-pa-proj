@@ -44,8 +44,7 @@
                     </v-img> -->
                     <div class="chatQA">
                       <div class="chatBox">
-                        <QandA :choices="choices" :questionId="questionId" />
-                        <ChatBox :currentQuestionId="questionId" />
+                        <ChatBox />
                       </div>
                       <div class="qaContainer">
                       </div>
@@ -109,12 +108,10 @@
 
 <script>
 import ChatBox from "@/components/ChatBox.vue"; // @ is an alias to /src
-import QandA from "@/components/QandA.vue"; // @ is an alias to /src
 
 export default {
       components: {
         ChatBox,
-        QandA,
       },
 
       data: () => ({

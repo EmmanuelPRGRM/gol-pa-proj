@@ -20,7 +20,7 @@ export default Vue.extend({
 
   props: {
     choices: Array,
-    questionId: String,
+    questionId: Number,
   },
 
   methods: {
@@ -37,10 +37,10 @@ export default Vue.extend({
     // }
   },
 
-  mounted() {
-    let question = this.getPublishedQuestion();
-    console.log(question);
-  }
+  // mounted() {
+  //   let question = this.getPublishedQuestion();
+  //   console.log(question);
+  // }
 });
 
 </script>
