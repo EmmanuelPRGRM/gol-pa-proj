@@ -33,11 +33,22 @@
                     }"
                 >
                 <!-- contents here-->
-                <v-img 
+                <div class="liveStreamContainer">
+                    <iframe src="https://vimeo.com/event/818966/embed/1815aa46b8?autoplay=1" frameborder="0" allow="autoplay; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+                </div>
+<!--                 <v-img 
                     class="blue-border"
                     src="@/assets/blue-border-gameon.png"
                     :style="{width:'70%', height:'70%', top:'13%'}">
-                </v-img>
+                </v-img> -->
+                <div class="chatQA">
+                  <div class="chatBox">
+                    <QandA :choices="choices" :questionId="questionId" />
+                    <ChatBox :currentQuestionId="questionId" />
+                  </div>
+                  <div class="qaContainer">
+                  </div>
+                </div>
                 <div style="margin-top: 8%; margin-left:7%">
                   <v-img
                     :src="item.url"
@@ -90,12 +101,19 @@
                 </v-dialog>
                 </div>
             </div>
+
 </v-container>
 </template>
 
 <script>
+import ChatBox from "@/components/ChatBox.vue"; // @ is an alias to /src
+import QandA from "@/components/QandA.vue"; // @ is an alias to /src
 
 export default {
+      components: {
+        ChatBox,
+        QandA,
+      },
 
       data: () => ({
          unityGame: false,
@@ -136,6 +154,8 @@ export default {
                 height: '8%'
             },
          ],
+        choices: [],
+        questionId: null,
       }),
 
        methods: {
@@ -148,9 +168,28 @@ export default {
                     this.unityLeaderboard = true
                     break;
             }
+        },
+        getPublishedChoices: () => {
+          // get published choices from api
+          return {
+            choices: [
+              {id: 0, choice: "Choice 12" },
+              {id: 1, choice: "Choice 2" },
+              {id: 2, choice: "Choice 2" }
+            ],
+            questionId: "sampleId"
+          }
+        },
+        submitChoice: () => {
+          return [];
         }
+       },
+
+       mounted() {
+        let {choices=[], questionId=null} = this.getPublishedChoices();
+        this.choices = choices;
+        this.questionId = questionId;
        }
-    
 }
 </script>
 
@@ -174,4 +213,43 @@ v-dialog
 }
 
 
+</style>
+
+<style lang="scss" scoped>
+.chatQA {
+    width: 30%;
+    text-align: left;
+    float: right;
+    margin-right: 5%;
+    border: solid #75dfe3 4px;
+    border-right: solid #75dfe3 20px;
+    background: rgba(155 190 255 / 0%);
+    height: 100%;
+}
+
+.liveBroadcast {
+  float: left;
+    width: 60%;
+    height: 80%;
+    margin-left: 5%;  
+    position: absolute;
+    display: inline-block;
+    left: 0;
+}
+
+.liveBroadcast iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.bodyContainer {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: inline-block;
+}
+
+.chatBox {
+  height: 100%;
+}
 </style>

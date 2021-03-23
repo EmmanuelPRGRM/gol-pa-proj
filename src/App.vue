@@ -1,20 +1,18 @@
 <template>
   <v-app>
     <v-main>
-      <Lobby/>
+      <router-view />
     </v-main>
     <orientation-blocker></orientation-blocker>
   </v-app>
 </template>
 
 <script>
-import Lobby from './views/Lobby.vue';
 
 export default {
   name: 'App',
 
   components: {
-    Lobby,
     OrientationBlocker: () => import('@/components/OrientationBlocker.vue'),
   },
 
