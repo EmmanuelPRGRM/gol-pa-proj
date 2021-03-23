@@ -33,21 +33,23 @@
                     }"
                 >
                 <!-- contents here-->
-                <div class="liveStreamContainer">
-                    <iframe src="https://vimeo.com/event/818966/embed/1815aa46b8?autoplay=1" frameborder="0" allow="autoplay; picture-in-picture" style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
-                </div>
-<!--                 <v-img 
-                    class="blue-border"
-                    src="@/assets/blue-border-gameon.png"
-                    :style="{width:'70%', height:'70%', top:'13%'}">
-                </v-img> -->
-                <div class="chatQA">
-                  <div class="chatBox">
-                    <QandA :choices="choices" :questionId="questionId" />
-                    <ChatBox :currentQuestionId="questionId" />
-                  </div>
-                  <div class="qaContainer">
-                  </div>
+                <div class=" v-image v-responsive blue-border theme--light mainLobbyContainer">
+                    <div class="liveStreamContainer">
+                        <iframe src="https://vimeo.com/event/818966/embed/1815aa46b8?autoplay=1" frameborder="0" allow="autoplay; picture-in-picture" style="top:0;left:0;width:100%;height:100%;"></iframe>
+                    </div>
+                    <!-- <v-img 
+                        class="blue-border"
+                        src="@/assets/blue-border-gameon.png"
+                        :style="{width:'70%', height:'70%', top:'13%'}">
+                    </v-img> -->
+                    <div class="chatQA">
+                      <div class="chatBox">
+                        <QandA :choices="choices" :questionId="questionId" />
+                        <ChatBox :currentQuestionId="questionId" />
+                      </div>
+                      <div class="qaContainer">
+                      </div>
+                    </div>
                 </div>
                 <div style="margin-top: 8%; margin-left:7%">
                   <v-img
@@ -217,7 +219,7 @@ v-dialog
 
 <style lang="scss" scoped>
 .chatQA {
-    width: 30%;
+    width: 25%;
     text-align: left;
     float: right;
     margin-right: 5%;
@@ -251,5 +253,15 @@ v-dialog
 
 .chatBox {
   height: 100%;
+}
+
+.liveStreamContainer {
+    width: 70%;
+    height: 100%;
+}
+
+.mainLobbyContainer {
+    top: 15%;
+    height: 70%;
 }
 </style>

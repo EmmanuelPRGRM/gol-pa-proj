@@ -43,4 +43,8 @@ orientation-blocker
 {
     z-index: 1;
 }
+
+html {
+  overflow-y: auto;
+}
 </style>

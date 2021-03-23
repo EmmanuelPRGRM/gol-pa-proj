@@ -1,10 +1,10 @@
 <template>
-  <div class="container d-flex justify-center chatMainContainer" :class="[currentQuestionId ? 'halfView' : '' ]">
-    <div id="chat-container" class="d-flex" v-if="showMessages">
+  <div class="container  justify-center chatMainContainer" :class="[currentQuestionId ? 'halfView' : '' ]">
+    <div id="chat-container" class="" v-if="showMessages">
       <!-- chat item -->
       <div v-for="(chat, index) of chats" 
         :key="index" 
-        class="text-left d-flex align-center chatLine">
+        class="text-left  align-center chatLine">
         <!-- time -->
         <div class="mx-1"><img src="~@/assets/avatar.png"></div>
         <!-- name -->
@@ -19,13 +19,13 @@
         <br />
       </div>
     </div>
-    <div id="chat-field" class="d-flex align-center messageInputContainer">
+    <div id="chat-field" class=" align-center messageInputContainer">
       <!-- input text -->
       <v-text-field
         v-model="myMessage"
         hide-details=""
         id="text-field"
-        class="pa-0 px-3 white rounded-xl messageInput"
+        class="pa-0 px-3 rounded-xl messageInput"
         @keypress.enter="onSend()"
         placeholder="START TYPING..."
       ></v-text-field>
@@ -239,11 +239,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
+  padding-top: 10px;
   #chat-container {
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 90%;
     width: 106%;
     color: #ebf4f7;
+    padding-top: 10px;
 
     .owner {
       color: #000000;
@@ -279,6 +281,7 @@ export default {
 }
 
 .container.halfView {
+  min-height: 50%;
   height: 50%;
 }
 
@@ -286,15 +289,15 @@ export default {
 
 <style lang="scss">
 .messageInputContainer {
-  width: 107%;
+  width: 109%;
   height: 10%;
   margin: 0px -16px;
   border: solid #75dfe3 4px;
-  padding: 25px 10px 0px;
+  padding: 14px 10px 0px;
   color: #a4b1c3;
   border-bottom: none;
 
-  >>> *::befpre {
+  >>> *::before {
     border-style: none !important;
   }
 
@@ -325,7 +328,7 @@ export default {
           display: inline;
           input {
             color: #ebf4f7;
-            width: 90%;
+            width: 70%;
           }
           input::placeholder {
             color: #a4b1c3;

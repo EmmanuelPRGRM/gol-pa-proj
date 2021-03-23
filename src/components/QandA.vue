@@ -54,6 +54,11 @@ export default Vue.extend({
     color: white;
     border: solid #75dfe3 4px;
     overflow-y: auto;
+    min-height: 50%;
+    max-height: 50%;
+    height: 50%;
+    width: 106%;
+    border-right: none;
   }
   .choicesContainer input {
     display: none;
