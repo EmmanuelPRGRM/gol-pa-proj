@@ -175,5 +175,8 @@ export default {
       color: black;
       border-radius: 10px;
     }
+    button:disabled {
+      background: #736e6e;
+    }
   }
 </style>
