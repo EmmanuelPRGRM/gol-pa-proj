@@ -1,8 +1,9 @@
-import Vue from "vue";
-import Vuex from "vuex";
+/* eslint-disable vue/experimental-script-setup-vars */
+import Vue from 'vue'
+import Vuex from 'vuex'
 import orientation from './modules/orientation'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
@@ -14,6 +15,6 @@ export default new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {
-    orientation,
+    orientation
   }
-});
+})
