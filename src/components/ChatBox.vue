@@ -83,17 +83,21 @@ export default {
         // if()
         if (!this.chats.find(data => { return data.slug == chat.slug})) {
           let tempMsg = '';
-          let { type="chat", questionId=null, message=""} = JSON.parse(chat.message);
-          if (type === "quiz" && questionId) {
-            //publish question
-            this.questionId = questionId;
-            return;
-          } else if (type === "quiz" && questionId === null) {
-            this.questionId = null;
-            return;
-          } else {
-            tempMsg = message
-            chat.message = tempMsg;
+          try {
+            let { type="chat", questionId=null, message=""} = JSON.parse(chat.message);
+            if (type === "quiz" && questionId) {
+              //publish question
+              this.questionId = questionId;
+              return;
+            } else if (type === "quiz" && questionId === null) {
+              this.questionId = null;
+              return;
+            } else {
+              tempMsg = message
+              chat.message = tempMsg;
+              this.chats.push(chat);
+            }
+          } catch(e) {
             this.chats.push(chat);
           }
         }
@@ -135,7 +139,7 @@ export default {
                 //   }
                 // */
                   try {
-                    let {type, questionId} = JSON.parse(x.message);
+                    let { type="chat", questionId=null, message=""} = JSON.parse(x.message);
                     if (type === "quiz" && questionId) {
                       //publish question
                       this.questionId = questionId;
@@ -145,6 +149,7 @@ export default {
                       this.questionId = null;
                       continue;
                     } else {
+                      x.message = message;
                       tempData.push(x);
                     }
                   } catch(e) {
@@ -166,7 +171,7 @@ export default {
                 //   }
                 // */
                   try {
-                    let {type, questionId} = JSON.parse(x.message);
+                    let { type="chat", questionId=null, message=""} = JSON.parse(x.message);
                     if (type === "quiz" && questionId) {
                       //publish question
                       this.questionId = questionId;
@@ -175,6 +180,7 @@ export default {
                       this.questionId = null;
                       continue;
                     } else {
+                      x.message = message;
                       this.chatQueue.push(x);
                     }
                   } catch(e) {
@@ -222,41 +228,36 @@ export default {
                       //     "questionId": Integer(id)
                       //   }
                       // */
-                        try {
-                          let {type, questionId} = JSON.parse(x.message);
-                          if (type === "quiz" && questionId) {
-                            this.questionId = questionId;
-                            //publish question
-                            continue;
-                          } else if (type === "quiz" && questionId === null) {
-                            this.questionId = null;
-                            continue;
-                          } else {
-                            tempData.push(x);
-                          }
-                        } catch(e) {
-                            tempData.push(x);
-                        }
-
-                      // end
-                    }
-                    this.chats = tempData;
-                } else {
-                    for(let x of data) {
-                      try {
-                        let {type, questionId} = JSON.parse(x.message);
+                        let {type="chat", questionId=null, message=""} = JSON.parse(x.message);
                         if (type === "quiz" && questionId) {
-                          //publish question
                           this.questionId = questionId;
+                          //publish question
                           continue;
                         } else if (type === "quiz" && questionId === null) {
                           this.questionId = null;
                           continue;
                         } else {
-                          this.chatQueue.push(x);
+                          x.message = message;
+                          tempData.push(x);
                         }
-                      } catch(e) {
-                          this.chatQueue.push(x);
+                      
+                      // end
+                    }
+                    this.chats = tempData;
+                } else {
+                    for(let x of data) {
+                      let {type="chat", questionId=null, message=""} = JSON.parse(x.message);
+                      
+                      if (type === "quiz" && questionId) {
+                        //publish question
+                        this.questionId = questionId;
+                        continue;
+                      } else if (type === "quiz" && questionId === null) {
+                        this.questionId = null;
+                        continue;
+                      } else {
+                        x.message = message;
+                        this.chatQueue.push(x);
                       }
                         // this.chatQueue.push(x)
                         // console.log('queue: ',this.chatQueue)
