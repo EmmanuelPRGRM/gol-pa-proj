@@ -82,7 +82,20 @@ export default {
         console.log('existing: ', this.chats.find( data => data.slug == chat.slug ))
         // if()
         if (!this.chats.find(data => { return data.slug == chat.slug})) {
-          this.chats.push(chat)
+          let tempMsg = '';
+          let { type="chat", questionId=null, message=""} = JSON.parse(chat.message);
+          if (type === "quiz" && questionId) {
+            //publish question
+            this.questionId = questionId;
+            return;
+          } else if (type === "quiz" && questionId === null) {
+            this.questionId = null;
+            return;
+          } else {
+            tempMsg = message
+            chat.message = tempMsg;
+            this.chats.push(chat);
+          }
         }
       }
       if (this.chatQueue.length < 2) {
