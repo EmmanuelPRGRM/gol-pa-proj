@@ -1,14 +1,19 @@
 <template>
   <div v-if="questionId" class="choicesContainer">
-    <h4>{{activeQuestionTitle}}</h4>
-    <ul id="qaChoices">
-      <li v-for="choice in choices" :key="choice.id">
-        <label>
-          <input type="radio" name="choices" value="choice.id">
-          <span>{{choice.title}}</span>
-        </label>
-      </li>
-    </ul>
+    <div style="overflow-y: auto; height: 90%;">
+      <h4 style="margin-right: 6px;">{{activeQuestionTitle}}</h4>
+      <ul id="qaChoices" style="padding-left: 0px; margin-right: 6px;">
+        <li v-for="choice in choices" :key="choice.id">
+          <label>
+            <input type="radio" name="choices" v-model="choiceValue" value="choice.id">
+            <span>{{choice.title}}</span>
+          </label>
+        </li>
+      </ul>
+    </div>
+    <div class="qaSubmitBtn">
+      <button :disabled="!choiceValue" v-on:click="submitAnswer">Submit</button>
+    </div>
   </div>
 </template>
 
@@ -32,6 +37,7 @@ export default {
     return {
       questions: [],
       choices: [],
+      choiceValue: null,
       activeQuestionTitle: "",
       axios: axios.create({
         baseURL: 'https://event.fourello.com/api',
@@ -56,6 +62,9 @@ export default {
       this.activeQuestionTitle = QUESTION_TITLE[question.question_group_id];
       this.choices = question.choices;
     },
+    submitAnswer: function() {
+      alert("submit");
+    }
   },
 
   updated() {
@@ -86,16 +95,15 @@ export default {
   .choicesContainer {
     font-size: 30px;
     margin: -4px;
-    padding: 20px;
     text-align: center;
     color: white;
     border: solid #75dfe3 4px;
-    overflow-y: auto;
     min-height: 50%;
-    max-height: 50%;
-    height: 50%;
+    max-height: 77%;
+    height: 77%;
     width: 106%;
     border-right: none;
+    position: relative;
   }
   .choicesContainer input {
     display: none;
@@ -131,5 +139,17 @@ export default {
     background-color: #ca952e;
     min-height: 65px;
     border: solid #dea647;
+  }
+
+  .qaSubmitBtn {
+    width: 100%;
+    padding: 4px 20px 0px 0px;
+    float: right;
+    button {
+      width: 60%;
+      background: #f5ebeb;
+      color: black;
+      border-radius: 10px;
+    }
   }
 </style>

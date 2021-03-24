@@ -426,8 +426,8 @@ export default {
 }
 
 .container.halfView {
-  min-height: 50%;
-  height: 50%;
+  min-height: 20%;
+  height: 20%;
 }
 
 </style>
