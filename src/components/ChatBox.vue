@@ -1,6 +1,6 @@
 <template>
   <div style="height: 100%">
-    <QandA :choices="choices" :questionId="questionId" />
+    <QandA :questionId="questionId" />
     <div class="container  justify-center chatMainContainer" :class="[questionId ? 'halfView' : '' ]">
       <div id="chat-container" class="" v-if="showMessages">
         <!-- chat item -->
@@ -67,7 +67,6 @@ export default {
       timeout: null,
       sending: false,
       userId: null,
-      choices: [],
       questionId: null,
     }
   },

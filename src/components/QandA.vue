@@ -1,11 +1,11 @@
 <template>
   <div v-if="questionId" class="choicesContainer">
-    <h4>Pick your Choice</h4>
+    <h4>{{activeQuestionTitle}}</h4>
     <ul id="qaChoices">
       <li v-for="choice in choices" :key="choice.id">
         <label>
           <input type="radio" name="choices" value="choice.id">
-          <span>{{choice.choice}}</span>
+          <span>{{choice.title}}</span>
         </label>
       </li>
     </ul>
@@ -13,39 +13,76 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import axios from "axios";
 
-export default Vue.extend({
-  name: "QandA",  
+const QUESTION_TITLE = {
+  5: "Trivia Mania 1",
+  6: "Trivia Mania 2",
+  7: "Trivia Mania 3",
+  8: "Trivia Mania 4",
+  9: "Trivia Mania 5",
+  10: "Trivia Mania 6",
+  11: "Trivia Mania 7",
+  12: "Trivia Mania 8",
+  13: "Trivia Mania 9",
+}
+export default {
+  name: "QandA",
+  data: () => {
+    return {
+      questions: [],
+      choices: [],
+      activeQuestionTitle: "",
+      axios: axios.create({
+        baseURL: 'https://event.fourello.com/api',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': "Bearer " + localStorage.getItem('auth_token')
+        }
+      }),
+    }
+  },
 
   props: {
-    choices: Array,
     questionId: Number,
   },
 
   methods: {
-    getPublishedQuestion: () => {
-      return {
-        questionId: "sampleCustomId"
-      }
-    },
+    getQuestion: function(id=null) {
+      let question = this.questions.filter(question => {
+        return question.id === id;
+      })[0];
 
-    // onCustomfocus: (event) => {
-    //   this.$emit('customfocus', {
-    //     questionId: "sampleCustomId"
-    //   });
-    // }
+      this.activeQuestionTitle = QUESTION_TITLE[question.question_group_id];
+      this.choices = question.choices;
+    },
   },
 
-  // mounted() {
-  //   let question = this.getPublishedQuestion();
-  //   console.log(question);
-  // }
-});
+  updated() {
+    if (this.questionId) {
+      this.getQuestion(this.questionId);
+    }
+  },
+
+  mounted() {
+    this.questions = JSON.parse(localStorage.getItem('questions'));
+    if (!this.questions.length) {
+      this.axios.get('/colpal/question?with_choices')
+      .then(res => {
+        localStorage.setItem('questions', JSON.stringify(res.data));
+        this.questions = res.data;
+        console.log('questions', res.data); 
+      });
+    }
+    if (this.questionId) {
+      this.getQuestion(this.questionId);
+    }
+  }
+};
 
 </script>
 
-<style lang="scss">
+<style lang='scss'>
   .choicesContainer {
     font-size: 30px;
     margin: -4px;
