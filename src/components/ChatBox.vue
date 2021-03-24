@@ -291,11 +291,11 @@ export default {
           //publish question
           tempMsg = '{"type":"' + type + `","questionId":` + questionId + `}`;
         } else {
-          tempMsg = '{"type":"chat","message":'+ this.myMessage + `}`;
+          tempMsg = '{"type":"chat","message":"'+ this.myMessage + `"}`;
         }
         parseMessage = tempMsg;
       } catch(e) {
-        parseMessage = '{"type":"chat","message":'+ this.myMessage + `}`;
+        parseMessage = '{"type":"chat","message":"'+ this.myMessage + `"}`;
       }
 
       // end
