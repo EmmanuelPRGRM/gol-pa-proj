@@ -1,3 +1,4 @@
+/* eslint-disable vue/experimental-script-setup-vars */
 <template>
   <v-container fill-height fluid black class="container">
     <v-overlay absolute z-index="0" opacity="1">
@@ -52,31 +53,31 @@ export default {
     teamImg: [
       {
         name: 'team_dragons',
-        url: require('@/assets/dragons-logo.png'),
+        url: require('@/assets/dragons-logo.png')
       },
       {
         name: 'team_grizzlies',
-        url: require('@/assets/grizzlies-logo.png'),
+        url: require('@/assets/grizzlies-logo.png')
       },
       {
         name: 'team_panthers',
-        url: require('@/assets/panthers-logo.png'),
+        url: require('@/assets/panthers-logo.png')
       },
       {
         name: 'team_ravens',
-        url: require('@/assets/ravens-logo.png'),
+        url: require('@/assets/ravens-logo.png')
       },
       {
         name: 'team_vipers',
-        url: require('@/assets/vipers-logo.png'),
+        url: require('@/assets/vipers-logo.png')
       },
       {
         name: 'team_wolves',
-        url: require('@/assets/wolves-logo.png'),
-      },
-    ],
-  }),
-};
+        url: require('@/assets/wolves-logo.png')
+      }
+    ]
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -143,7 +144,7 @@ export default {
   margin-left: 35%;
   margin-top: 1%;
   align-self: center;
-  
+
    @media only screen and (min-width: 812px) {
     width: 25%;
     height: 34%;
@@ -168,9 +169,6 @@ export default {
     align-self: center;
   }
 
-
-
-
   @media only screen and (max-width: 823px) {
     width: 20%;
     height: 30%;
@@ -178,7 +176,6 @@ export default {
     margin-left: 40%;
     align-self: center;
   }
-
 
 }
 
@@ -189,7 +186,7 @@ export default {
   text-shadow: 0 0 10px #ff7300;
   margin-top: 1%;
   text-align: center;
-  
+
   @media only screen and (min-width: 568px) {
     margin-bottom: 0;
     // margin-bottom: 12%;
@@ -208,7 +205,6 @@ export default {
     margin-top: 2%;
     text-align: center;
   }
-
 
 }
 
@@ -287,7 +283,6 @@ export default {
     font-size: 55%;
     // margin-bottom: 12%;
   }
-
 
   @media only screen and (min-width: 823px) {
     margin-top: 4%;

@@ -1,20 +1,24 @@
 <template>
   <v-app>
     <v-main>
-      <Lobby/>
+      <router-link to="/"></router-link>
+      <router-link to="/login-animation"></router-link>
+      <router-link to="/login"></router-link>
+      <router-link to="/lobby"></router-link>
+      <!-- <transition name="fade" mode="out-in"> -->
+        <router-view></router-view>
+      <!-- </transition> -->
     </v-main>
     <orientation-blocker></orientation-blocker>
   </v-app>
 </template>
 
 <script>
-import Lobby from './views/Lobby.vue';
 
 export default {
   name: 'App',
 
   components: {
-    Lobby,
     OrientationBlocker: () => import('@/components/OrientationBlocker.vue'),
   },
 
