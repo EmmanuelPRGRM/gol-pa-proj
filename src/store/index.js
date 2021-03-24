@@ -1,20 +1,20 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import orientation from './modules/orientation';
-import authentication from './modules/authentication';
-import awit from './modules/awit';
-import settings from './modules/settings';
+/* eslint-disable vue/experimental-script-setup-vars */
+import Vue from 'vue'
+import Vuex from 'vuex'
+import orientation from './modules/orientation'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    modal: false,
+    termsModalState: false,
+    firstName: '',
+    teamName: ''
+  },
   mutations: {},
   actions: {},
   modules: {
-    orientation,
-    authentication,
-    awit,
-    settings
+    orientation
   }
-});
+})

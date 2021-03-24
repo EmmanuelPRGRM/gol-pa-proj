@@ -1,45 +1,34 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Login from "../views/Login.vue";
-import Lobby from '../views/Lobby.vue';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const routes = [
+
   {
-    path: "/",
-    name: "Login",
-    component: Login,
+    path: '/',
+    name: 'LandingPage',
+    component: () => import('@/views/LandingPage.vue')
   },
   {
-
-    path: "/lobby",
-    name: "Lobby",
-    component: Lobby,
+    path: '/login-animation',
+    name: 'LoginAnimation',
+    component: () => import(/* webpackChunkName: "Lobby" */ '../views/LoginAnimation')
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "Lobby" */ '../views/Login')
+  },
+  {
+    path: '/lobby',
+    name: 'Lobby',
+    component: () => import(/* webpackChunkName: "Lobby" */ '../views/Lobby')
   }
-];
+]
 
 const router = new VueRouter({
-  mode: 'hash',
-  base: process.env.BASE_URL,
-  routes,
-});
-
-
-// route guard
-import store from '@/store'
-router.beforeEach((to, from, next) => {
-  const auth_token = store.getters['authentication/token'];
-  
-  if ( to.name !== 'Login' && !auth_token ) {
-    store.dispatch('authentication/logout', {})
-    next({ name: 'Login' });
-  }
-  else if ( to.name === 'Login' && auth_token ) {
-    next({ name: 'Lobby' });
-  }
-  else {
-    next();
-  }
+  routes
 })
-export default router;
+
+export default router

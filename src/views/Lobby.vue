@@ -1,11 +1,13 @@
+/* eslint-disable vue/experimental-script-setup-vars */
 <template>
     <v-container fill-height fluid black class="container">
+     <welcome-modal></welcome-modal>
     <v-overlay
             absolute
             z-index="0"
             opacity="1"
         >
-            <v-img 
+            <v-img
                 :src="bgDark"
                 :style="{opacity:1, width:'100vw', height: '100vh'}"></v-img>
         </v-overlay>
@@ -37,7 +39,7 @@
                     <div class="liveStreamContainer">
                         <iframe src="https://vimeo.com/event/818966/embed/1815aa46b8?autoplay=1" frameborder="0" allow="autoplay; picture-in-picture" style="top:0;left:0;width:100%;height:100%;"></iframe>
                     </div>
-                    <!-- <v-img 
+                    <!-- <v-img
                         class="blue-border"
                         src="@/assets/blue-border-gameon.png"
                         :style="{width:'70%', height:'70%', top:'13%'}">
@@ -66,9 +68,9 @@
                      @click="cursorClick(item.name)"
                     ></v-img>
                 </div>
-                <v-dialog 
-                    id="unitygame-dialog" 
-                    v-model="unityGame" 
+                <v-dialog
+                    id="unitygame-dialog"
+                    v-model="unityGame"
                     v-if="unityGame">
                         <iframe
                          :style="{
@@ -77,29 +79,30 @@
                         height: '80vh',
                         justify: 'center',
                         border: 'none',
-                         }" 
-                        id="unitygame-frame" 
-                        src="https://game.onecpthedigitalevent2021.com" 
+                         }"
+                        id="unitygame-frame"
+                        src="https://game.onecpthedigitalevent2021.com"
                         title="W3Schools Free Online Web Tutorials">
                         </iframe>
                 </v-dialog>
-                <v-dialog 
-                    id="unitygame-dialog" 
-                    v-model="unityLeaderboard" 
+                <v-dialog
+                    id="unitygame-dialog"
+                    v-model="unityLeaderboard"
                     v-if="unityLeaderboard">
-                        <iframe 
+                        <iframe
                          :style="{
                         position:'relative',
                         width: '80vw',
                         height: '80vh',
                         justify: 'center',
                         border: 'none',
-                         }" 
-                        id="unitygame-frame" 
-                        src="https://leaderboard.onecpthedigitalevent2021.com" 
+                         }"
+                        id="unitygame-frame"
+                        src="https://leaderboard.onecpthedigitalevent2021.com"
                         title="W3Schools Free Online Web Tutorials">
                         </iframe>
                 </v-dialog>
+                <v-dialog v-model="showVlounge" v-if="showVlounge"><v-lounge></v-lounge></v-dialog>
                 </div>
             </div>
 
@@ -107,99 +110,106 @@
 </template>
 
 <script>
-import ChatBox from "@/components/ChatBox.vue"; // @ is an alias to /src
+import ChatBox from '@/components/ChatBox.vue' // @ is an alias to /src
+import VLounge from '../components/VLounge.vue'
+import WelcomeModal from '../components/WelcomeModal.vue'
 
 export default {
-      components: {
-        ChatBox,
+  components: {
+    ChatBox,
+    VLounge,
+    WelcomeModal
+  },
+
+  data: () => ({
+    showVlounge: false,
+    unityGame: false,
+    unityLeaderboard: false,
+    bgDark: require('@/assets/lobby-bg-2.png'),
+    bg: require('@/assets/lobby-bg.png'),
+    clickables: [
+      {
+        name: 'photobooth-btn',
+        url: require('@/assets/photobooth-btn.png'),
+        x: '0%',
+        y: '15%',
+        width: '15%',
+        height: '8%'
       },
+      {
+        name: 'vlounge-btn',
+        url: require('@/assets/vlounge-btn.png'),
+        x: '0%',
+        y: '15%',
+        width: '15%',
+        height: '8%'
+      },
+      {
+        name: 'game-btn',
+        url: require('@/assets/game-btn.png'),
+        x: '0%',
+        y: '15%',
+        width: '15%',
+        height: '8%'
+      },
+      {
+        name: 'leaderboard-btn',
+        url: require('@/assets/leaderboard-btn.png'),
+        x: '0%',
+        y: '15%',
+        width: '15%',
+        height: '8%'
+      }
+    ],
+    choices: [],
+    questionId: null
+  }),
 
-      data: () => ({
-         unityGame: false,
-         unityLeaderboard:false,
-         bgDark: require('@/assets/lobby-bg-2.png'),
-         bg:require('@/assets/lobby-bg.png'),
-         clickables: [
-            {
-                name: 'photobooth-btn',
-                url: require('@/assets/photobooth-btn.png'),
-                x: '0%',
-                y: '15%',
-                width:'15%',
-                height: '8%'
-            },
-            {
-                name: 'vlounge-btn',
-                url: require('@/assets/vlounge-btn.png'),
-                x: '0%',
-                y: '15%',
-                width:'15%',
-                height: '8%'
-            },
-            {
-                name: 'game-btn',
-                url: require('@/assets/game-btn.png'),
-                x: '0%',
-                y: '15%',
-                width:'15%',
-                height: '8%'
-            },
-            {
-                name: 'leaderboard-btn',
-                url: require('@/assets/leaderboard-btn.png'),
-                x: '0%',
-                y: '15%',
-                width:'15%',
-                height: '8%'
-            },
-         ],
-        choices: [],
-        questionId: null,
-      }),
+  methods: {
+    cursorClick (val) {
+      switch (val) {
+        case 'game-btn':
+          this.unityGame = true
+          break
+        case 'leaderboard-btn':
+          this.unityLeaderboard = true
+          break
+        case 'vlounge-btn':
+          this.showVlounge = true
+          break
+      }
+    },
+    getPublishedChoices: () => {
+      // get published choices from api
+      return {
+        choices: [
+          { id: 0, choice: 'Choice 12' },
+          { id: 1, choice: 'Choice 2' },
+          { id: 2, choice: 'Choice 2' }
+        ],
+        questionId: 'sampleId'
+      }
+    },
+    submitChoice: () => {
+      return []
+    }
+  },
 
-       methods: {
-        cursorClick(val) {
-            switch(val) {
-                case 'game-btn':
-                    this.unityGame = true
-                    break;
-                case 'leaderboard-btn':
-                    this.unityLeaderboard = true
-                    break;
-            }
-        },
-        getPublishedChoices: () => {
-          // get published choices from api
-          return {
-            choices: [
-              {id: 0, choice: "Choice 12" },
-              {id: 1, choice: "Choice 2" },
-              {id: 2, choice: "Choice 2" }
-            ],
-            questionId: "sampleId"
-          }
-        },
-        submitChoice: () => {
-          return [];
-        }
-       },
-
-       mounted() {
-        let {choices=[], questionId=null} = this.getPublishedChoices();
-        this.choices = choices;
-        this.questionId = questionId;
-       }
+  mounted () {
+    const { choices = [], questionId = null } = this.getPublishedChoices()
+    this.choices = choices
+    this.questionId = questionId
+  }
 }
 </script>
 
 <style scoped>
 
-
 .cursor-pulse
 {
     display: inline-block;
     cursor: pointer;
-}   
+}
 
 #unitygame-frame
 {
@@ -210,7 +220,6 @@ v-dialog
 {
     z-index: 1;
 }
-
 
 </style>
 
@@ -227,10 +236,10 @@ v-dialog
 }
 
 .liveBroadcast {
-  float: left;
+    float: left;
     width: 60%;
     height: 80%;
-    margin-left: 5%;  
+    margin-left: 5%;
     position: absolute;
     display: inline-block;
     left: 0;

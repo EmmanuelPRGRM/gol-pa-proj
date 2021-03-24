@@ -1,7 +1,13 @@
 <template>
   <v-app>
     <v-main>
-      <router-view />
+      <router-link to="/"></router-link>
+      <router-link to="/login-animation"></router-link>
+      <router-link to="/login"></router-link>
+      <router-link to="/lobby"></router-link>
+      <!-- <transition name="fade" mode="out-in"> -->
+        <router-view></router-view>
+      <!-- </transition> -->
     </v-main>
     <orientation-blocker></orientation-blocker>
   </v-app>
@@ -13,13 +19,13 @@ export default {
   name: 'App',
 
   components: {
-    OrientationBlocker: () => import('@/components/OrientationBlocker.vue'),
+    OrientationBlocker: () => import('@/components/OrientationBlocker.vue')
   },
 
   data: () => ({
     //
-  }),
-};
+  })
+}
 </script>
 
 <style>
