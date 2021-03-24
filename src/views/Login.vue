@@ -16,14 +16,14 @@
             </div>
           </template>
         </v-checkbox>
-        <!-- <v-img
+        <v-img
           contain
           src="../assets/login/submit-btn.png"
           class="mx-auto login-btn"
           id="login-btn"
           v-on:click="authenticate"
-        ></v-img> -->
-        <button class="login-btn" v-on:click="authenticate">ENTER</button>
+        ></v-img>
+        <!-- <button class="login-btn" v-on:click="authenticate">ENTER</button> -->
 
       </v-container>
     </v-form>
@@ -170,7 +170,7 @@ export default {
     cursor: pointer;
     height: 40px;
 
-    padding: 0;
+    /* padding: 0;
     margin: 0;
     color: #f5e500;
     background-color: rgb(37, 37, 37) !important;
@@ -180,14 +180,14 @@ export default {
     font-size: 30px;
     width: 25%;
     height: 10%;
-    /* padding: 30px; */
+    padding: 30px;
     box-shadow: 0 0 20px rgb(255, 0, 0);
     text-shadow: 0 0 10px rgb(255, 0, 0);
-    /* max-width: 200px; */
+    max-width: 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
   }
 
   /* Moto G4, Galaxy S5, iphone 5/SE */
