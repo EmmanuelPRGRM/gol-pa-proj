@@ -11,6 +11,7 @@
     "@vimeo/player": "^2.15.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "moment": "^2.29.1",
     "v-video-embed": "^1.0.8",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
