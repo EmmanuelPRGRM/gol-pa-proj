@@ -5,7 +5,7 @@
       <ul id="qaChoices" style="padding-left: 0px; margin-right: 6px;">
         <li v-for="choice in choices" :key="choice.id">
           <label>
-            <input type="radio" name="choices" v-model="choiceValue" value="choice.id">
+            <input type="radio" name="choices" v-model="choiceValue" :value="choice.id">
             <span>{{choice.title}}</span>
           </label>
         </li>
@@ -39,6 +39,7 @@ export default {
       choices: [],
       choiceValue: null,
       activeQuestionTitle: "",
+      groupId: null,
       axios: axios.create({
         baseURL: 'https://event.fourello.com/api',
         headers: {
@@ -59,11 +60,34 @@ export default {
         return question.id === id;
       })[0];
 
-      this.activeQuestionTitle = QUESTION_TITLE[question.question_group_id];
+      this.groupId = question.question_group_id;
+      this.activeQuestionTitle = QUESTION_TITLE[this.groupId];
       this.choices = question.choices;
     },
     submitAnswer: function() {
-      alert("submit");
+      console.log("submit choice1", this.choiceValue);
+      console.log("submit groupId", this.groupId);
+      console.log("submit questionId", this.questionId);
+
+      if (!this.choiceValue || !this.groupId || !this.questionId) {
+        console.log("please select a choice");
+        return;
+      }
+
+      this.axios.post('/colpal/question', {
+        "question_group_id": this.groupId,
+        "answers": [
+          {
+            "choice_id": this.choiceValue,
+            "qustion_id": this.questionId,
+          }
+        ],
+      })
+      .then(res => {
+        // localStorage.setItem('questions', JSON.stringify(res.data));
+        // this.questions = res.data;
+        console.log('questions', res.data); 
+      });
     }
   },
 
