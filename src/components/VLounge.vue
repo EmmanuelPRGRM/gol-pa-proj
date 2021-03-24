@@ -34,7 +34,7 @@
       >
         <p class="join-now-text">JOIN YOUR TEAM NOW!</p>
         <!-- change src to :src="teamImg.name"-->
-        <v-img class="team-logo" contain :src="teamImg[0].url"> </v-img>
+        <v-img class="team-logo" contain :src="imgUrl"> </v-img>
         <p class="link-vlounge">LINK TO YOUR VLOUNGE:</p>
         <!-- <div class="google_meet">
           <p>HTTPS://MEET.GOOGLE.COM/XAG-HKWX-QGF</p>
@@ -50,6 +50,8 @@ export default {
   data: () => ({
     bgDark: require('@/assets/bg1.jpg'),
     bg: require('@/assets/border.png'),
+    team: localStorage.getItem('team-name'),
+    imgUrl: '',
     teamImg: [
       {
         name: 'team_dragons',
@@ -76,7 +78,20 @@ export default {
         url: require('@/assets/wolves-logo.png')
       }
     ]
-  })
+  }),
+  methods: {
+
+    setImageUrl: function () {
+      this.teamImg.forEach(teamObject => {
+        if (this.team === teamObject.name) {
+          this.imgUrl = teamObject.url
+        }
+      })
+    }
+  },
+  mounted () {
+    this.setImageUrl()
+  }
 }
 </script>
 

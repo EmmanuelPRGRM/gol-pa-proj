@@ -68,6 +68,8 @@ export default {
           // Assign data to Global State
           this.$store.firstName = response.data.data.user.first_name
           this.$store.teamName = response.data.data.user.category
+          // console.log(this.$store.firstName)
+          localStorage.setItem('team-name', this.$store.teamName)
 
           // After 3 seconds redirect to Lobby
           setTimeout(() => this.$router.push({ name: 'Lobby' }), 4000)
