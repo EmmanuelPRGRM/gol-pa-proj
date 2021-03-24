@@ -13,35 +13,35 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue'
 
 export default Vue.extend({
-  name: "QandA",  
+  name: 'QandA',
 
   props: {
     choices: Array,
-    questionId: Number,
+    questionId: Number
   },
 
   methods: {
     getPublishedQuestion: () => {
       return {
-        questionId: "sampleCustomId"
+        questionId: 'sampleCustomId'
       }
-    },
+    }
 
     // onCustomfocus: (event) => {
     //   this.$emit('customfocus', {
     //     questionId: "sampleCustomId"
     //   });
     // }
-  },
+  }
 
   // mounted() {
   //   let question = this.getPublishedQuestion();
   //   console.log(question);
   // }
-});
+})
 
 </script>
 

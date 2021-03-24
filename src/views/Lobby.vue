@@ -1,6 +1,7 @@
 /* eslint-disable vue/experimental-script-setup-vars */
 <template>
     <v-container fill-height fluid black class="container">
+     <welcome-modal></welcome-modal>
     <v-overlay
             absolute
             z-index="0"
@@ -101,6 +102,7 @@
                         title="W3Schools Free Online Web Tutorials">
                         </iframe>
                 </v-dialog>
+                <v-dialog v-model="showVlounge" v-if="showVlounge"><v-lounge></v-lounge></v-dialog>
                 </div>
             </div>
 
@@ -109,13 +111,18 @@
 
 <script>
 import ChatBox from '@/components/ChatBox.vue' // @ is an alias to /src
+import VLounge from '../components/VLounge.vue'
+import WelcomeModal from '../components/WelcomeModal.vue'
 
 export default {
   components: {
-    ChatBox
+    ChatBox,
+    VLounge,
+    WelcomeModal
   },
 
   data: () => ({
+    showVlounge: false,
     unityGame: false,
     unityLeaderboard: false,
     bgDark: require('@/assets/lobby-bg-2.png'),
@@ -166,6 +173,9 @@ export default {
           break
         case 'leaderboard-btn':
           this.unityLeaderboard = true
+          break
+        case 'vlounge-btn':
+          this.showVlounge = true
           break
       }
     },
