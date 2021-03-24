@@ -16,13 +16,14 @@
             </div>
           </template>
         </v-checkbox>
-        <v-img
+        <!-- <v-img
           contain
           src="../assets/login/submit-btn.png"
           class="mx-auto login-btn"
           id="login-btn"
           v-on:click="authenticate"
-        ></v-img>
+        ></v-img> -->
+        <button class="login-btn" v-on:click="authenticate">ENTER</button>
 
       </v-container>
     </v-form>
@@ -165,9 +166,28 @@ export default {
     color: white !important;
   }
 
-  #login-btn, #login-btn:hover {
+  .login-btn, .login-btn:hover {
     cursor: pointer;
     height: 40px;
+
+    padding: 0;
+    margin: 0;
+    color: #f5e500;
+    background-color: rgb(37, 37, 37) !important;
+    border: 2px solid#f5b400 ;
+    border-radius: 0px;
+    font-family: "oceanicdriftlaser";
+    font-size: 30px;
+    width: 25%;
+    height: 10%;
+    /* padding: 30px; */
+    box-shadow: 0 0 20px rgb(255, 0, 0);
+    text-shadow: 0 0 10px rgb(255, 0, 0);
+    /* max-width: 200px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   /* Moto G4, Galaxy S5, iphone 5/SE */
@@ -182,8 +202,9 @@ export default {
       height: 40px;
     }
 
-    #login-btn, #login-btn:hover{
-      height: 25px;
+    .login-btn, .login-btn:hover{
+      height: 5%;
+      font-size: 20px;
     }
 
     #login-form-container .v-input--selection-controls{
