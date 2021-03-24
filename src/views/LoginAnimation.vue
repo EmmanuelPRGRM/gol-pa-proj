@@ -1,3 +1,4 @@
+/* eslint-disable vue/experimental-script-setup-vars */
 <template>
   <v-container fluid class="fill-height black">
      <v-overlay
@@ -18,7 +19,7 @@
     </v-overlay>
     <iframe
       v-show="ready"
-      src="https://player.vimeo.com/video/524849184?background=1&loop=false"
+      src="https://player.vimeo.com/video/524849184?background=1&loop=false&quality=1080p"
       ref="vimeoPlayer"
       width="100%"
       height="100%"
@@ -93,9 +94,9 @@ export default {
       // console.log(iframe)
       this.player = new Player(iframe)
 
-      this.player.setQuality('720p').then(function (quality) {
+      this.player.setQuality('1080p').then(function (quality) {
         // quality was successfully set
-        console.log('quality successfully set to: '+quality)
+        console.log('quality successfully set to: ' + quality)
       }).catch(function (error) {
         switch (error.name) {
           case 'TypeError':
