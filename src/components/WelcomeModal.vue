@@ -15,7 +15,9 @@
             <p class="join">JOIN <span class="yellow-text">{{ team }}</span> IN THEIR NEW MISSION.</p>
         </div>
        <!-- <div class="game-on-btn"></div> -->
-        <v-img contain max-height="50" class="game-on-btn" src="../assets/lobby/game-on-btn.png" v-on:click="closePrompt"></v-img>
+        <!-- <v-img contain max-height="50" class="game-on-btn" src="../assets/lobby/game-on-btn.png" v-on:click="closePrompt"></v-img> -->
+        <!-- <v-btn class="game-on-btn"><span>GAME ON</span></v-btn> -->
+        <button class="game-on-btn" v-on:click="closePrompt">GAME ON</button>
     </div>
   </v-dialog>
 </template>
@@ -71,6 +73,18 @@ export default {
 .game-on-btn{
     padding: 0;
     margin: 0;
+    color: #FF990D;
+    background-color: rgb(37, 37, 37) !important;
+    border: 5px solid #FF990D;
+    border-radius: 0px;
+    font-family: "oceanicdriftlaser";
+    font-size: 28px;
+    width: 30%;
+    /* height: 300px; */
+    /* padding: 30px; */
+    box-shadow: 0 0 10px rgb(255, 0, 0);
+    text-shadow: 0 0 10px rgb(255, 0, 0);
+    /* max-width: 200px; */
 }
 .game-on-btn:hover{
     cursor: pointer;
