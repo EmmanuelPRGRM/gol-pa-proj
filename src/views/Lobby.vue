@@ -69,45 +69,45 @@
                     ></v-img>
                 </div>
                 <v-dialog
-                    id="unitygame-dialog"
-                    v-model="unityGame"
-                    v-if="unityGame">
-                     <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 28px;" @click="unityGame = false">
-                      <v-icon color="white" large>mdi-close-circle-outline</v-icon>
-                    </v-btn>
-                        <iframe
-                         :style="{
-                        position:'relative',
-                        width: '80vw',
-                        height: '80vh',
-                        justify: 'center',
-                        border: 'none',
-                         }"
-                        id="unitygame-frame"
-                        src="https://game.onecpthedigitalevent2021.com"
-                        title="W3Schools Free Online Web Tutorials">
-                        </iframe>
+                  id="unitygame-dialog"
+                  v-model="unityGame"
+                  v-if="unityGame"
+                  fullscreen
+                  :style="{
+                        position:'absolute',
+                        width: '100%',
+                        height: '100%',
+                        top:0,
+                        left:0,
+                        bottom:0,
+                        right:0,
+                   }">
+                <game-frame></game-frame>
+                <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 20px;" @click="unityGame = false">
+                  <v-icon color="white" large>mdi-close-circle-outline</v-icon>
+                </v-btn>
                 </v-dialog>
+
                 <v-dialog
                     id="unitygame-dialog"
                     v-model="unityLeaderboard"
-                    v-if="unityLeaderboard">
-                     <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 28px;" @click="unityLeaderboard = false">
-                      <v-icon color="white" large>mdi-close-circle-outline</v-icon>
-                    </v-btn>
-                        <iframe
-                         :style="{
-                        position:'relative',
-                        width: '80vw',
-                        height: '80vh',
-                        justify: 'center',
-                        border: 'none',
-                         }"
-                        id="unitygame-frame"
-                        src="https://leaderboard.onecpthedigitalevent2021.com"
-                        title="W3Schools Free Online Web Tutorials">
-                        </iframe>
+                    v-if="unityLeaderboard"
+                    fullscreen
+                    :style="{
+                        position:'absolute',
+                        width: '100%',
+                        height: '100%',
+                        top:0,
+                        left:0,
+                        bottom:0,
+                        right:0,
+                   }">
+                   <leaderboard-frame></leaderboard-frame>
+                      <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 20px;" @click="unityLeaderboard = false">
+                        <v-icon color="white" large>mdi-close-circle-outline</v-icon>
+                      </v-btn>
                 </v-dialog>
+
                 <v-dialog
                     class="grey darken-4"
                     id="photobooth-dialog"
@@ -141,9 +141,9 @@
                 <v-icon color="white" large>mdi-close-circle-outline</v-icon>
                 </v-btn>
                 </v-dialog>
+                 <orientation-blocker></orientation-blocker>
                 </div>
             </div>
-
 </v-container>
 </template>
 
@@ -151,12 +151,17 @@
 import ChatBox from '@/components/ChatBox.vue' // @ is an alias to /src
 import VLounge from '../components/VLounge.vue'
 import WelcomeModal from '../components/WelcomeModal.vue'
+import GameFrame from '../components/GameFrame.vue'
+import LeaderboardFrame from '../components/LeaderboardFrame.vue'
 
 export default {
   components: {
     ChatBox,
     VLounge,
-    WelcomeModal
+    WelcomeModal,
+    OrientationBlocker: () => import("@/components/OrientationBlocker.vue"),
+    GameFrame,
+    LeaderboardFrame,
   },
 
   data: () => ({
