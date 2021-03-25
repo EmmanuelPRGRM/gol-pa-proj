@@ -1,58 +1,54 @@
 <template>
-  <div style="height: 100%">
-    <QandA :choices="choices" :questionId="questionId" />
-    <div class="container  justify-center chatMainContainer" :class="[questionId ? 'halfView' : '' ]">
-      <div id="chat-container" class="" v-if="showMessages">
-        <!-- chat item -->
-        <div v-for="(chat, index) of chats" 
-          :key="index" 
-          class="text-left  align-center chatLine">
-          <!-- time -->
-          <div class="mx-1"><img src="~@/assets/avatar.png"></div>
-          <!-- name -->
-          <div class="mx-2">
-            <span class="text-decoration-underline" :class="{'owner': chat.project_user_identifier == userId}">
-              {{chat.project_user.data.first_name}}
-            </span>
-          </div>
-          <br />
-          <!-- chat text -->
-          <div class="my-1">{{chat.message}}</div>
-          <br />
+  <div class="container d-flex justify-center chatMainContainer" :class="[currentQuestionId ? 'halfView' : '' ]">
+    <div id="chat-container" class="d-flex" v-if="showMessages">
+      <!-- chat item -->
+      <div v-for="(chat, index) of chats" 
+        :key="index" 
+        class="text-left d-flex align-center chatLine">
+        <!-- time -->
+        <div class="mx-1"><img src="~@/assets/avatar.png"></div>
+        <!-- name -->
+        <div class="mx-2">
+          <span class="text-decoration-underline" :class="{'owner': chat.project_user_identifier == userId}">
+            {{chat.project_user.data.name}}
+          </span>
         </div>
+        <br />
+        <!-- chat text -->
+        <div class="my-1">{{chat.message}}</div>
+        <br />
       </div>
-      <div id="chat-field" class=" align-center messageInputContainer">
-        <!-- input text -->
-        <v-text-field
-          v-model="myMessage"
-          hide-details=""
-          id="text-field"
-          class="pa-0 px-3 rounded-xl messageInput"
-          @keypress.enter="onSend()"
-          placeholder="START TYPING..."
-        ></v-text-field>
-        <!-- enter chat btn -->
-        <v-btn
-          icon
-          class="ml-1 dmButton"
-          
-          @click="onSend()"
-        >
-          <img src="~@/assets/DMicon.png">
-        </v-btn>
-      </div>
+    </div>
+    <div id="chat-field" class="d-flex align-center messageInputContainer">
+      <!-- input text -->
+      <v-text-field
+        v-model="myMessage"
+        hide-details=""
+        id="text-field"
+        class="pa-0 px-3 white rounded-xl messageInput"
+        @keypress.enter="onSend()"
+        placeholder="START TYPING..."
+      ></v-text-field>
+      <!-- enter chat btn -->
+      <v-btn
+        icon
+        class="ml-1 dmButton"
+        
+        @click="onSend()"
+      >
+        <img src="~@/assets/DMicon.png">
+      </v-btn>
     </div>
   </div>
 </template>
 
 <script>
 import moment from "moment";
-import QandA from "@/components/QandA.vue"; // @ is an alias to /src
 
 export default {
   name: 'ChatBox',
-  components: {
-    QandA,
+  props: {
+    currentQuestionId: String,
   },
 
   data() {
@@ -66,9 +62,7 @@ export default {
       intervalTimeout: 500,
       timeout: null,
       sending: false,
-      userId: null,
-      choices: [],
-      questionId: null,
+      userId: null
     }
   },
 
@@ -80,10 +74,9 @@ export default {
         console.log('queue: ', this.chatQueue.length)
         console.log('new chat: ',chat)
         console.log('existing: ', this.chats.find( data => data.slug == chat.slug ))
-        // if()
-        if (!this.chats.find(data => { return data.slug == chat.slug})) {
+        if ( !this.chats.find(data => { return data.slug == chat.slug}) )
           this.chats.push(chat)
-        }
+          console.log('test 2', this.chatQueue)
       }
       if (this.chatQueue.length < 2) {
         this.fetchChat()
@@ -110,65 +103,10 @@ export default {
             }
 
             if(isFirst) {
-              let tempData = [];
-              for(let x of data) {
-                // for colpal event only = start
-                // let parseMessage;
-                // /**
-                //   quiz publish data format: 
-                //   {
-                //     "type": "quiz",
-                //     "questionId": Integer(id)
-                //   }
-                // */
-                  try {
-                    let {type, questionId} = JSON.parse(x.message);
-                    if (type === "quiz" && questionId) {
-                      //publish question
-                      this.questionId = questionId;
-                      console.log("skipped", x.message);
-                      continue;
-                    } else if (type === "quiz" && questionId === null) {
-                      this.questionId = null;
-                      continue;
-                    } else {
-                      tempData.push(x);
-                    }
-                  } catch(e) {
-                      tempData.push(x);
-                  }
-
-                // end
-              }
-              this.chats = tempData;
+              this.chats = data
             } else {
               for(let x of data) {
-                // for colpal event only = start
-                // let parseMessage;
-                // /**
-                //   quiz publish data format: 
-                //   {
-                //     "type": "quiz",
-                //     "questionId": Integer(id)
-                //   }
-                // */
-                  try {
-                    let {type, questionId} = JSON.parse(x.message);
-                    if (type === "quiz" && questionId) {
-                      //publish question
-                      this.questionId = questionId;
-                      continue;
-                    } else if (type === "quiz" && questionId === null) {
-                      this.questionId = null;
-                      continue;
-                    } else {
-                      this.chatQueue.push(x);
-                    }
-                  } catch(e) {
-                      this.chatQueue.push(x);
-                  }
-
-                // end
+                  this.chatQueue.push(x)
               }
             }
           })
@@ -198,54 +136,10 @@ export default {
                 }
 
                 if(isFirst) {
-                    let tempData = [];
-                    for(let x of data) {
-                      // for colpal event only = start
-                      // let parseMessage;
-                      // /**
-                      //   quiz publish data format: 
-                      //   {
-                      //     "type": "quiz",
-                      //     "questionId": Integer(id)
-                      //   }
-                      // */
-                        try {
-                          let {type, questionId} = JSON.parse(x.message);
-                          if (type === "quiz" && questionId) {
-                            this.questionId = questionId;
-                            //publish question
-                            continue;
-                          } else if (type === "quiz" && questionId === null) {
-                            this.questionId = null;
-                            continue;
-                          } else {
-                            tempData.push(x);
-                          }
-                        } catch(e) {
-                            tempData.push(x);
-                        }
-
-                      // end
-                    }
-                    this.chats = tempData;
+                    this.chats = data
                 } else {
                     for(let x of data) {
-                      try {
-                        let {type, questionId} = JSON.parse(x.message);
-                        if (type === "quiz" && questionId) {
-                          //publish question
-                          this.questionId = questionId;
-                          continue;
-                        } else if (type === "quiz" && questionId === null) {
-                          this.questionId = null;
-                          continue;
-                        } else {
-                          this.chatQueue.push(x);
-                        }
-                      } catch(e) {
-                          this.chatQueue.push(x);
-                      }
-                        // this.chatQueue.push(x)
+                        this.chatQueue.push(x)
                         // console.log('queue: ',this.chatQueue)
                     }
                 }
@@ -275,33 +169,8 @@ export default {
         headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}`, Accept: 'application/json' }
       };
 
-      // for colpal event only = start
-      let parseMessage;
-      /**
-        quiz publish data format: (sample)
-        {
-          "type": "quiz",
-          "questionId": 13
-        }
-      */
-      try {
-        let {type, questionId} = JSON.parse(this.myMessage);
-        let tempMsg = '';
-        if (type === "quiz" && (questionId || questionId === null)) {
-          //publish question
-          tempMsg = '{"type":"' + type + `","questionId":` + questionId + `}`;
-        } else {
-          tempMsg = '{"type":"chat","message":'+ this.myMessage + `}`;
-        }
-        parseMessage = tempMsg;
-      } catch(e) {
-        parseMessage = '{"type":"chat","message":'+ this.myMessage + `}`;
-      }
-
-      // end
-
       let payload = {
-        message: parseMessage,
+        message: this.myMessage
       }
       this.sending = true
       this.$http.post(url, payload, config)
@@ -370,13 +239,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
-  padding-top: 10px;
   #chat-container {
-    overflow-y: auto;
+    overflow-y: scroll;
     height: 90%;
     width: 106%;
     color: #ebf4f7;
-    padding-top: 10px;
 
     .owner {
       color: #000000;
@@ -405,7 +272,6 @@ export default {
     display: block;
     min-height: 45px;
     margin-bottom: 10px;
-    overflow-wrap: break-word;
   }
 
   height: 100%;
@@ -413,7 +279,6 @@ export default {
 }
 
 .container.halfView {
-  min-height: 50%;
   height: 50%;
 }
 
@@ -421,15 +286,15 @@ export default {
 
 <style lang="scss">
 .messageInputContainer {
-  width: 109%;
+  width: 107%;
   height: 10%;
   margin: 0px -16px;
   border: solid #75dfe3 4px;
-  padding: 14px 10px 0px;
+  padding: 25px 10px 0px;
   color: #a4b1c3;
   border-bottom: none;
 
-  >>> *::before {
+  >>> *::befpre {
     border-style: none !important;
   }
 
@@ -460,7 +325,7 @@ export default {
           display: inline;
           input {
             color: #ebf4f7;
-            width: 70%;
+            width: 90%;
           }
           input::placeholder {
             color: #a4b1c3;
