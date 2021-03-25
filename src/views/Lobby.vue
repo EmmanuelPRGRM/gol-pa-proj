@@ -50,104 +50,9 @@
                         src="@/assets/blue-border-gameon.png"
                         :style="{width:'70%', height:'70%', top:'13%'}">
                     </v-img> -->
-                    <div class="chatQA">
-                      <div class="chatBox">
-                        <ChatBox />
-                      </div>
-                      <div class="qaContainer">
-                      </div>
-                    </div>
-                </div>
-                <div style="margin-top: 8%; margin-left:7%">
-                  <v-img
-                    :src="item.url"
-                    class="cursor-pulse"
-                    v-for="(item, key) of clickables"
-                    :key="key"
-                    :style="{
-                        position:'relative',
-                        top: item.y,
-                        left: item.x,
-                        width: item.width,
-                        height: item.height,
-                    }"
-                     @click="cursorClick(item.name)"
-                    ></v-img>
-                </div>
-                <v-dialog
-                    id="unitygame-dialog"
-                    v-model="unityGame"
-                    v-if="unityGame">
-                     <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 28px;" @click="unityGame = false">
-                      <v-icon color="white" large>mdi-close-circle-outline</v-icon>
-                    </v-btn>
-                        <iframe
-                         :style="{
-                        position:'relative',
-                        width: '80vw',
-                        height: '80vh',
-                        justify: 'center',
-                        border: 'none',
-                         }"
-                        id="unitygame-frame"
-                        src="https://game.onecpthedigitalevent2021.com"
-                        title="W3Schools Free Online Web Tutorials">
-                        </iframe>
-                </v-dialog>
-                <v-dialog
-                    id="unitygame-dialog"
-                    v-model="unityLeaderboard"
-                    v-if="unityLeaderboard">
-                     <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 28px;" @click="unityLeaderboard = false">
-                      <v-icon color="white" large>mdi-close-circle-outline</v-icon>
-                    </v-btn>
-                        <iframe
-                         :style="{
-                        position:'relative',
-                        width: '80vw',
-                        height: '80vh',
-                        justify: 'center',
-                        border: 'none',
-                         }"
-                        id="unitygame-frame"
-                        src="https://leaderboard.onecpthedigitalevent2021.com"
-                        title="W3Schools Free Online Web Tutorials">
-                        </iframe>
-                </v-dialog>
-                <v-dialog
-                    class="grey darken-4"
-                    id="photobooth-dialog"
-                    v-model="photobooth"
-                    v-if="photobooth">
-                    <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 28px;" @click="photobooth = false">
-                      <v-icon color="white" large>mdi-close-circle-outline</v-icon>
-                    </v-btn>
-                        <iframe
-                        allow="camera;microphone"
-                        :style="{
-                        background: 'transparent',
-                        position:'relative',
-                        width: '50vw',
-                        height: '55vh',
-                        justify: 'center',
-                        border: 'none',
-                        top:0,
-                        marginLeft: '20%',
-                        bottom:0,
-                        right:0,
-                        }"
-                        id="photobooth-frame"
-                        src="https://cogbooth.fourello.com/#/colpal"
-                        title="W3Schools Free Online Web Tutorials">
-                        </iframe>
-                </v-dialog>
-                <v-dialog v-model="showVlounge" v-if="showVlounge">
-                <v-lounge></v-lounge>
-                <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 28px;" @click="showVlounge = false">
-                <v-icon color="white" large>mdi-close-circle-outline</v-icon>
-                </v-btn>
-                </v-dialog>
-                </div>
+          <div class="chatQA">
+            <div class="chatBox">
+              <ChatBox />
             </div>
             <div class="qaContainer"></div>
           </div>
@@ -168,43 +73,104 @@
             @click="cursorClick(item.name)"
           ></v-img>
         </div>
-        <v-dialog id="unitygame-dialog" v-model="unityGame" v-if="unityGame">
-          <iframe
-            :style="{
-              position: 'relative',
-              width: '80vw',
-              height: '80vh',
-              justify: 'center',
-              border: 'none',
-            }"
-            id="unitygame-frame"
-            src="https://game.onecpthedigitalevent2021.com"
-            title="W3Schools Free Online Web Tutorials"
+        <v-dialog
+          id="unitygame-dialog"
+          v-model="unityGame"
+          v-if="unityGame"
+          fullscreen
+          :style="{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+          }"
+        >
+          <game-frame></game-frame>
+          <v-btn
+            icon
+            large
+            style="position: absolute; color: #fff; right: 20px; top: 20px"
+            @click="unityGame = false"
           >
-          </iframe>
+            <v-icon color="white" large>mdi-close-circle-outline</v-icon>
+          </v-btn>
         </v-dialog>
+
         <v-dialog
           id="unitygame-dialog"
           v-model="unityLeaderboard"
           v-if="unityLeaderboard"
+          fullscreen
+          :style="{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+          }"
         >
+          <leaderboard-frame></leaderboard-frame>
+          <v-btn
+            icon
+            large
+            style="position: absolute; color: #fff; right: 20px; top: 20px"
+            @click="unityLeaderboard = false"
+          >
+            <v-icon color="white" large>mdi-close-circle-outline</v-icon>
+          </v-btn>
+        </v-dialog>
+
+        <v-dialog
+          class="grey darken-4"
+          id="photobooth-dialog"
+          v-model="photobooth"
+          v-if="photobooth"
+        >
+          <v-btn
+            icon
+            large
+            style="position: absolute; color: #fff; right: 20px; top: 28px"
+            @click="photobooth = false"
+          >
+            <v-icon color="white" large>mdi-close-circle-outline</v-icon>
+          </v-btn>
           <iframe
+            allow="camera;microphone"
             :style="{
+              background: 'transparent',
               position: 'relative',
-              width: '80vw',
-              height: '80vh',
+              width: '50vw',
+              height: '55vh',
               justify: 'center',
               border: 'none',
+              top: 0,
+              marginLeft: '20%',
+              bottom: 0,
+              right: 0,
             }"
-            id="unitygame-frame"
-            src="https://leaderboard.onecpthedigitalevent2021.com"
+            id="photobooth-frame"
+            src="https://cogbooth.fourello.com/#/colpal"
             title="W3Schools Free Online Web Tutorials"
           >
           </iframe>
         </v-dialog>
-        <v-dialog v-model="showVlounge" v-if="showVlounge"
-          ><v-lounge @close="closeVlounge"></v-lounge
-        ></v-dialog>
+        <v-dialog v-model="showVlounge" v-if="showVlounge">
+          <v-lounge></v-lounge>
+          <v-btn
+            icon
+            large
+            style="position: absolute; color: #fff; right: 20px; top: 28px"
+            @click="showVlounge = false"
+          >
+            <v-icon color="white" large>mdi-close-circle-outline</v-icon>
+          </v-btn>
+        </v-dialog>
+        <orientation-blocker></orientation-blocker>
       </div>
     </div>
   </v-container>
@@ -214,12 +180,17 @@
 import ChatBox from "@/components/ChatBox.vue"; // @ is an alias to /src
 import VLounge from "../components/VLounge.vue";
 import WelcomeModal from "../components/WelcomeModal.vue";
+import GameFrame from "../components/GameFrame.vue";
+import LeaderboardFrame from "../components/LeaderboardFrame.vue";
 
 export default {
   components: {
     ChatBox,
     VLounge,
     WelcomeModal,
+    OrientationBlocker: () => import("@/components/OrientationBlocker.vue"),
+    GameFrame,
+    LeaderboardFrame,
   },
 
   data: () => ({
