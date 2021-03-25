@@ -134,7 +134,7 @@
           <v-btn
             icon
             large
-            style="position: absolute; color: #fff; right: 20px; top: 28px"
+            style="position: absolute; color: #fff; right: 20px; top: 20px;"
             @click="photobooth = false"
           >
             <v-icon color="white" large>mdi-close-circle-outline</v-icon>
@@ -144,12 +144,12 @@
             :style="{
               background: 'transparent',
               position: 'relative',
-              width: '50vw',
-              height: '55vh',
+              width: '55%',
+              height: '58vh',
               justify: 'center',
               border: 'none',
               top: 0,
-              marginLeft: '20%',
+              marginLeft: '23%',
               bottom: 0,
               right: 0,
             }"
