@@ -72,6 +72,9 @@
                     id="unitygame-dialog"
                     v-model="unityGame"
                     v-if="unityGame">
+                     <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 28px;" @click="unityGame = false">
+                      <v-icon color="white" large>mdi-close-circle-outline</v-icon>
+                    </v-btn>
                         <iframe
                          :style="{
                         position:'relative',
@@ -89,6 +92,9 @@
                     id="unitygame-dialog"
                     v-model="unityLeaderboard"
                     v-if="unityLeaderboard">
+                     <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 28px;" @click="unityLeaderboard = false">
+                      <v-icon color="white" large>mdi-close-circle-outline</v-icon>
+                    </v-btn>
                         <iframe
                          :style="{
                         position:'relative',
@@ -102,7 +108,39 @@
                         title="W3Schools Free Online Web Tutorials">
                         </iframe>
                 </v-dialog>
-                <v-dialog v-model="showVlounge" v-if="showVlounge"><v-lounge></v-lounge></v-dialog>
+                <v-dialog
+                    class="grey darken-4"
+                    id="photobooth-dialog"
+                    v-model="photobooth"
+                    v-if="photobooth">
+                    <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 28px;" @click="photobooth = false">
+                      <v-icon color="white" large>mdi-close-circle-outline</v-icon>
+                    </v-btn>
+                        <iframe
+                        allow="camera;microphone"
+                        :style="{
+                        background: 'transparent',
+                        position:'relative',
+                        width: '50vw',
+                        height: '55vh',
+                        justify: 'center',
+                        border: 'none',
+                        top:0,
+                        marginLeft: '20%',
+                        bottom:0,
+                        right:0,
+                        }"
+                        id="photobooth-frame"
+                        src="https://cogbooth.fourello.com/#/colpal"
+                        title="W3Schools Free Online Web Tutorials">
+                        </iframe>
+                </v-dialog>
+                <v-dialog v-model="showVlounge" v-if="showVlounge">
+                <v-lounge></v-lounge>
+                <v-btn icon large style="position: absolute; color: #fff; right: 20px; top: 28px;" @click="showVlounge = false">
+                <v-icon color="white" large>mdi-close-circle-outline</v-icon>
+                </v-btn>
+                </v-dialog>
                 </div>
             </div>
 
@@ -125,6 +163,7 @@ export default {
     showVlounge: false,
     unityGame: false,
     unityLeaderboard: false,
+    photobooth: false,
     bgDark: require('@/assets/lobby-bg-2.png'),
     bg: require('@/assets/lobby-bg.png'),
     clickables: [
@@ -176,6 +215,9 @@ export default {
           break
         case 'vlounge-btn':
           this.showVlounge = true
+          break
+        case 'photobooth-btn':
+          this.photobooth = true
           break
       }
     },
@@ -269,5 +311,11 @@ v-dialog
 .mainLobbyContainer {
     top: 15%;
     height: 70%;
+}
+
+#photobooth-dialog
+
+{
+  background-color: black !important;
 }
 </style>
