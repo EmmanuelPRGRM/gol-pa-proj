@@ -159,7 +159,8 @@
             ></v-img> -->
             <!-- </div> -->
           </div>
-          <div v-else>
+          <!-- For events that requires name -->
+          <!-- <div v-else>
             <v-text-field
               v-model="name"
               filled
@@ -183,7 +184,7 @@
                 ENTER
               </v-btn>
             </div>
-          </div>
+          </div> -->
           <!-- </v-col> -->
           <!-- </v-row> -->
           <!-- </div> -->
@@ -247,7 +248,7 @@ export default {
           // login success
           onSuccess: (response) => {
             this.bg = "@/assets/login-bg-active.jpg";
-            if (!response.data.data.user.name) {
+            if (!response.data.data.user.id) {
               this.validCode = true;
               this.admin = false;
               this.userId = response.data.data.user.id;
