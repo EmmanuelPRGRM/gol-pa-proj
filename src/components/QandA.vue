@@ -56,9 +56,15 @@ export default {
 
   methods: {
     getQuestion: function(id=null) {
+      if (!this.questions) {
+        this.fetchQuestions();
+      }
+
       let question = this.questions.filter(question => {
         return question.id === id;
       })[0];
+
+      console.log("qustion", question);
 
       this.groupId = question.question_group_id;
       this.activeQuestionTitle = QUESTION_TITLE[this.groupId];
@@ -88,6 +94,19 @@ export default {
         // this.questions = res.data;
         console.log('questions', res.data); 
       });
+    },
+    fetchQuestions: function() {
+      let localQuestions = localStorage.getItem('questions');
+      if (!localQuestions) {
+        this.axios.get('/colpal/question?with_choices')
+        .then(res => {
+          localStorage.setItem('questions', JSON.stringify(res.data));
+          this.questions = res.data;
+          console.log('questions', res.data); 
+        });
+      } else {
+        this.questions = JSON.parse(localQuestions);
+      }
     }
   },
 
@@ -98,15 +117,7 @@ export default {
   },
 
   mounted() {
-    this.questions = JSON.parse(localStorage.getItem('questions'));
-    if (!this.questions.length) {
-      this.axios.get('/colpal/question?with_choices')
-      .then(res => {
-        localStorage.setItem('questions', JSON.stringify(res.data));
-        this.questions = res.data;
-        console.log('questions', res.data); 
-      });
-    }
+    this.fetchQuestions();
     if (this.questionId) {
       this.getQuestion(this.questionId);
     }
