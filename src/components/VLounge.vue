@@ -32,6 +32,14 @@
           right: 0,
         }"
       >
+        <v-btn
+          icon
+          large
+          style="position: absolute; color: #fff; right: 20px; top: 28px"
+          @click="$emit('close')"
+        >
+          <v-icon color="white" large>mdi-close-circle-outline</v-icon>
+        </v-btn>
         <p class="join-now-text">JOIN YOUR TEAM NOW!</p>
         <!-- change src to :src="teamImg.name"-->
         <v-img class="team-logo" contain :src="imgUrl"> </v-img>
@@ -90,6 +98,9 @@ export default {
   }),
   methods: {
     setImageUrl: function () {
+      let user = JSON.parse(localStorage.getItem("user"));
+      this.team = user.category;
+
       this.teamImg.forEach((teamObject) => {
         if (this.team === teamObject.name) {
           this.imgUrl = teamObject.url;

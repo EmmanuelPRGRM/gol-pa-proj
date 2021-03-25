@@ -2,7 +2,7 @@
   <v-container fluid id="main-container" class="pa-0 ma-0">
     <lobby-transition v-if="transition"></lobby-transition>
     <modal></modal>
-    <incorrect-modal v-if="incorrectModal"></incorrect-modal>
+    <!-- <incorrect-modal v-if="incorrectModal"></incorrect-modal> -->
     <v-overlay absolute z-index="0" opacity="1">
       <v-img
         :src="bgDark"
@@ -172,7 +172,7 @@
         </div>
       </div>
     </div>
-    <terms-and-conditions-modal v-if="showTerms"></terms-and-conditions-modal>
+    <!-- <terms-and-conditions-modal v-if="showTerms"></terms-and-conditions-modal> -->
   </v-container>
 </template>
 
@@ -180,12 +180,14 @@
 // import LoginBottomBar from '../components/Login/LoginBottomBar.vue';
 import tidio from "@/helpers/tidio.js";
 import moment from "moment-timezone";
-import IncorrectModal from "../components/IncorrectModal.vue";
-import TermsAndConditions from "../components/TermsAndConditionsModal.vue";
+// import IncorrectModal from "../components/IncorrectModal.vue";
+// import TermsAndConditions from "../components/TermsAndConditionsModal.vue";
 import Modal from "../components/Modal.vue";
 
+// IncorrectModal, TermsAndConditions,
+
 export default {
-  components: { IncorrectModal, TermsAndConditions, Modal },
+  components: { Modal },
   data() {
     return {
       validCode: false,
@@ -198,12 +200,11 @@ export default {
       userId: null,
       temp_auth: null,
       transition: false,
-      incorrectModal: false,
       bgDark: require("@/assets/bgdark.jpg"),
       bg: require("@/assets/landing-bg.jpg"),
     };
   },
-
+  //  incorrectModal: false,
   metaInfo: {
     title: "Login",
   },
