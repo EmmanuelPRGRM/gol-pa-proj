@@ -285,6 +285,7 @@ export default {
     },
     logout() {
       localStorage.clear();
+      console.log("localStorage cleared");
       this.$router.push({ name: "Login" });
     },
   },
