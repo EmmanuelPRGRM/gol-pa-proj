@@ -170,6 +170,14 @@
             <v-icon color="white" large>mdi-close-circle-outline</v-icon>
           </v-btn>
         </v-dialog>
+        <v-img
+          src="../assets/lobby/logout-btn.png"
+          contain
+          height="50"
+          width="100"
+          class="logout-btn"
+          v-on:click="logout()"
+        ></v-img>
         <orientation-blocker></orientation-blocker>
       </div>
     </div>
@@ -275,6 +283,10 @@ export default {
     closeVlounge() {
       this.showVlounge = false;
     },
+    logout() {
+      localStorage.clear();
+      this.$router.push({ name: "Login" });
+    },
   },
 
   mounted() {
@@ -286,6 +298,16 @@ export default {
 </script>
 
 <style scoped>
+.logout-btn {
+  position: absolute;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  cursor: pointer;
+}
+
 .cursor-pulse {
   display: inline-block;
   cursor: pointer;
