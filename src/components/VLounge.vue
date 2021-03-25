@@ -32,14 +32,14 @@
           right: 0,
         }"
       >
-        <v-btn
+        <!--<v-btn
           icon
           large
           style="position: absolute; color: #fff; right: 20px; top: 28px"
           @click="$emit('close')"
         >
           <v-icon color="white" large>mdi-close-circle-outline</v-icon>
-        </v-btn>
+        </v-btn>-->
         <p class="join-now-text">JOIN YOUR TEAM NOW!</p>
         <!-- change src to :src="teamImg.name"-->
         <v-img class="team-logo" contain :src="imgUrl"> </v-img>
