@@ -6,18 +6,14 @@
     overlay-color="black"
     width="600px"
   >
-    <!-- <v-img  v-on:click="promptLogic" contain src="../assets/lobby/welcome-prompt.png" class="modal"> </v-img> -->
     <div class="bg-container">
       <div class="text-wrapper text-center">
         <p class="text-name">HI, {{ firstName }}!</p>
         <p class="text-welcome">WELCOME TO<br />ONE CP: DIGITAL EVENT</p>
-        <p class="join">
+        <p class="join" v-if="userType === 'basic_user'">
           JOIN <span class="yellow-text">{{ team }}</span> IN THEIR NEW MISSION.
         </p>
       </div>
-      <!-- <div class="game-on-btn"></div> -->
-      <!-- <v-img contain max-height="50" class="game-on-btn" src="../assets/lobby/game-on-btn.png" v-on:click="closePrompt"></v-img> -->
-      <!-- <v-btn class="game-on-btn"><span>GAME ON</span></v-btn> -->
       <button class="game-on-btn" v-on:click="closePrompt">GAME ON</button>
     </div>
   </v-dialog>
@@ -30,6 +26,7 @@ export default {
       showPrompt: true,
       firstName: " ",
       team: " ",
+      userType: " ",
     };
   },
   methods: {
@@ -40,6 +37,7 @@ export default {
   mounted() {
     // this.team = localStorage.getItem("user.category");
     let user = JSON.parse(localStorage.getItem("user"));
+    this.userType = user.user_type;
     this.firstName = user.first_name;
     this.team = user.category.replace("_", " ");
   },

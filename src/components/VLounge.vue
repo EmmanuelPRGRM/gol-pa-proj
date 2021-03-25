@@ -32,31 +32,27 @@
           right: 0,
         }"
       >
-        <!--<v-btn
-          icon
-          large
-          style="position: absolute; color: #fff; right: 20px; top: 28px"
-          @click="$emit('close')"
+        <span v-if="userType === 'basic_user'">
+          <p class="join-now-text">JOIN YOUR TEAM NOW!</p>
+          <v-img class="team-logo" contain :src="imgUrl"> </v-img>
+          <p class="link-vlounge">LINK TO YOUR VLOUNGE:</p>
+          <v-btn
+            ><span
+              ><a
+                href="HTTPS://US02WEB.ZOOM.US/j/85214515135"
+                target="_blank"
+                class="link"
+                >HTTPS://US02WEB.ZOOM.US/j/85214515135</a
+              ></span
+            ></v-btn
+          >
+        </span>
+        <span
+          class="admin-text"
+          v-else-if="userType === 'event_admin' || userType === 'admin'"
         >
-          <v-icon color="white" large>mdi-close-circle-outline</v-icon>
-        </v-btn>-->
-        <p class="join-now-text">JOIN YOUR TEAM NOW!</p>
-        <!-- change src to :src="teamImg.name"-->
-        <v-img class="team-logo" contain :src="imgUrl"> </v-img>
-        <p class="link-vlounge">LINK TO YOUR VLOUNGE:</p>
-        <!-- <div class="google_meet">
-          <p>HTTPS://MEET.GOOGLE.COM/XAG-HKWX-QGF</p>
-        </div> -->
-        <v-btn
-          ><span
-            ><a
-              href="HTTPS://US02WEB.ZOOM.US/j/85214515135"
-              target="_blank"
-              class="link"
-              >HTTPS://US02WEB.ZOOM.US/j/85214515135</a
-            ></span
-          ></v-btn
-        >
+          "YOU ARE LOGGED IN AS AN ADMINISTRATOR"
+        </span>
       </div>
     </div>
   </v-container>
@@ -65,6 +61,7 @@
 <script>
 export default {
   data: () => ({
+    userType: " ",
     bgDark: require("@/assets/bg1.jpg"),
     bg: require("@/assets/border.png"),
     team: localStorage.getItem("team-name"),
@@ -110,11 +107,24 @@ export default {
   },
   mounted() {
     this.setImageUrl();
+    let user = JSON.parse(localStorage.getItem("user"));
+    this.userType = user.user_type;
+    console.log(this.userType);
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.admin-text {
+  color: #00ffff;
+  font-family: "Azonix";
+  font-size: 300%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .link {
   text-decoration: none;
   color: white;
