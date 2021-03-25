@@ -196,7 +196,7 @@ export default {
   },
 
   mounted () {
-    const { choices = [], questionId = null } = this.getPublishedChoices()
+    let { choices = [], questionId = null } = this.getPublishedChoices()
     this.choices = choices
     this.questionId = questionId
   }
