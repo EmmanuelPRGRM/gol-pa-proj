@@ -80,7 +80,7 @@ export default {
         return;
       }
 
-      this.axios.post('/colpal/question', {
+      this.axios.post('/colpal/answer', {
         "question_group_id": this.groupId,
         "answers": [
           {
