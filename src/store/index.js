@@ -11,8 +11,6 @@ export default new Vuex.Store({
   state: {
     modal: false,
     termsModalState: false,
-    firstName: '',
-    teamName: ''
   },
   mutations: {},
   actions: {},
