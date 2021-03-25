@@ -1,10 +1,6 @@
 <template>
   <v-app>
     <v-main>
-      <router-link to="/"></router-link>
-      <router-link to="/login-animation"></router-link>
-      <router-link to="/login"></router-link>
-      <router-link to="/lobby"></router-link>
       <router-view />
     </v-main>
     <orientation-blocker></orientation-blocker>
