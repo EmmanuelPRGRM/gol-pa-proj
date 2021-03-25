@@ -14,6 +14,9 @@
 <script>
 export default {
   name: "App",
+  metaInfo: {
+    title: 'Colgate Palmolive | The Digital Event 2021',
+  },
 
   components: {
     OrientationBlocker: () => import("@/components/OrientationBlocker.vue"),
