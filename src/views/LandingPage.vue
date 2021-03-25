@@ -1,8 +1,8 @@
 <template>
   <v-container fluid id="main-container" class="pa-0 ma-0">
-    <!-- <lobby-transition v-if="transition"></lobby-transition> -->
+    <lobby-transition v-if="transition"></lobby-transition>
+    <modal></modal>
     <incorrect-modal v-if="incorrectModal"></incorrect-modal>
-    <terms-and-conditions-modal v-if="showTerms"></terms-and-conditions-modal>
     <v-overlay absolute z-index="0" opacity="1">
       <v-img
         :src="bgDark"
@@ -66,11 +66,11 @@
                   placeholder="EMAIL ADDESS"
                   class="d-block"
                 ></v-text-field> -->
-              <!-- onfocus="this.placeholder = ''" -->
               <input
                 id="login-input-email"
                 type="email"
                 placeholder="E-MAIL ADDRESS"
+                onfocus="this.placeholder = ''"
                 v-model="username"
                 v-on:keyup.enter="authenticate"
               />
@@ -105,59 +105,40 @@
             <!-- <v-col cols="1"> -->
 
             <!-- <v-progress-circular
-              v-else
-              indeterminate
-              color="primary"
-            ></v-progress-circular> -->
+                  v-else
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular> -->
             <!-- </v-col> -->
             <!-- </v-row> -->
           </div>
-          <div v-else-if="admin" class="wrapper">
-            <!-- <v-text-field
+          <div v-else-if="admin">
+            <v-text-field
               v-model="password"
               filled
               hide-details
               type="Password"
               class="mx-14 white d-block"
               :error="error"
-            ></v-text-field> -->
-            <input
-              id="login-input-password"
-              type="password"
-              placeholder="PASSWORD"
-              onfocus="this.placeholder = ''"
-              v-model="password"
-              :error="error"
-            />
-            <!--  v-on:keyup.enter="authenticate" -->
+            ></v-text-field>
 
             <v-slide-x-transition>
               <h4 v-show="!!error" class="error-message mt-3 text-center">
                 {{ error }}
               </h4>
             </v-slide-x-transition>
-            <v-btn v-if="!loading" icon color="transparent" width="100%">
-              <v-img
-                contain
-                width="50"
-                height="35"
-                src="@/assets/submit-btn.png"
-                id="login-btn"
-                class="mt-5"
+
+            <div id="enter-btn" class="d-block mx-auto mt-5 rounded-lg">
+              <v-btn
+                width="100%"
+                color="#ffc75b"
+                class="px-10 rounded-lg"
+                :loading="loading"
                 @click="validateCode"
-              ></v-img>
-            </v-btn>
-            <!-- <div id="enter-btn" class="d-block mx-auto mt-5 rounded-lg"> -->
-            <!-- <v-img
-              contain
-              width="50"
-              height="35"
-              src="@/assets/submit-btn.png"
-              id="login-btn"
-              class="mb-5"
-              @click="validateCode"
-            ></v-img> -->
-            <!-- </div> -->
+              >
+                ENTER
+              </v-btn>
+            </div>
           </div>
           <div v-else>
             <v-text-field
@@ -191,6 +172,7 @@
         </div>
       </div>
     </div>
+    <terms-and-conditions-modal v-if="showTerms"></terms-and-conditions-modal>
   </v-container>
 </template>
 
@@ -199,11 +181,11 @@
 import tidio from "@/helpers/tidio.js";
 import moment from "moment-timezone";
 import IncorrectModal from "../components/IncorrectModal.vue";
-import TermsAndConditionsModal from "../components/TermsAndConditionsModal.vue";
+import TermsAndConditions from "../components/TermsAndConditionsModal.vue";
 import Modal from "../components/Modal.vue";
 
 export default {
-  components: { IncorrectModal, TermsAndConditionsModal, Modal },
+  components: { IncorrectModal, TermsAndConditions, Modal },
   data() {
     return {
       validCode: false,
@@ -217,10 +199,8 @@ export default {
       temp_auth: null,
       transition: false,
       incorrectModal: false,
-      showTerms: false,
-      checkbox: false,
       bgDark: require("@/assets/bgdark.jpg"),
-      bg: require("@/assets/login-bg-inactive.jpg"),
+      bg: require("@/assets/landing-bg.jpg"),
     };
   },
 
@@ -236,85 +216,78 @@ export default {
       // post request
       this.loading = true;
       this.error = null;
+      this.$store.dispatch("authentication/login", {
+        // credentials
+        data: {
+          username: this.username.toLowerCase(),
+          password: this.password,
+        },
+        // login success
+        onSuccess: (response) => {
+          if (!response.data.data.user.name) {
+            this.validCode = true;
+            this.admin = false;
+            this.userId = response.data.data.user.id;
+            this.temp_auth = response.data.data.token;
+            this.$store.commit("authentication/CLEAR_USER");
+            this.$store.commit("authentication/CLEAR_TOKEN");
+          } else {
+            this.$router.push({ name: "Lobby" });
+            this.loading = false;
+          }
+        },
+        // login fail
+        onError: (error) => {
+          var server_message = null;
+          var slug = null;
 
-      if (this.checkbox) {
-        this.$store.dispatch("authentication/login", {
-          // credentials
-          data: {
-            username: this.username.toLowerCase(),
-            password: this.password,
-          },
-          // login success
-          onSuccess: (response) => {
-            this.bg = "@/assets/login-bg-active.jpg";
-            if (!response.data.data.user.name) {
-              this.validCode = true;
-              this.admin = false;
-              this.userId = response.data.data.user.id;
-              this.temp_auth = response.data.data.token;
-              this.$store.commit("authentication/CLEAR_USER");
-              this.$store.commit("authentication/CLEAR_TOKEN");
-            } else {
-              this.$router.push({ name: "Lobby" });
-              this.loading = false;
-            }
-          },
-          // login fail
-          onError: (error) => {
-            var server_message = null;
-            var slug = null;
+          if (typeof error.response.data === "object") {
+            server_message = error.response.data.message;
+            slug = error.response.data.slug;
+          } else {
+            server_message = error.response.data;
+          }
 
-            if (typeof error.response.data === "object") {
-              server_message = error.response.data.message;
-              slug = error.response.data.slug;
-            } else {
-              server_message = error.response.data;
-            }
+          if (slug == "you_cannot_login_yet") {
+            const { gates } = this.$store.getters["settings/settings"];
+            console.log(gates);
+            const restrictionDates = gates.find(
+              (data) => data.type === "login"
+            );
 
-            if (slug == "you_cannot_login_yet") {
-              const { gates } = this.$store.getters["settings/settings"];
-              console.log(gates);
-              const restrictionDates = gates.find(
-                (data) => data.type === "login"
+            if (restrictionDates) {
+              var today = moment.utc();
+              var loginStart = moment.utc(
+                restrictionDates.start_at,
+                "YYYY-MM-DD HH:mm:ss"
+              );
+              var loginEnd = moment.utc(
+                restrictionDates.end_at,
+                "YYYY-MM-DD HH:mm:ss"
               );
 
-              if (restrictionDates) {
-                var today = moment.utc();
-                var loginStart = moment.utc(
-                  restrictionDates.start_at,
-                  "YYYY-MM-DD HH:mm:ss"
-                );
-                var loginEnd = moment.utc(
-                  restrictionDates.end_at,
-                  "YYYY-MM-DD HH:mm:ss"
-                );
-
-                if (!today.isBetween(loginStart, loginEnd)) {
-                  this.error =
-                    "You cannot enter yet. The event will start on March 15, 2021";
-                } else this.error = server_message;
-              }
-            } else if (slug == "user_not_found") {
-              this.error = "Code doesn't exist";
-              this.incorrectModal = true;
-            } else if (slug == "please_login_with_a_password") {
-              if (this.admin) {
-                this.error = "Incorrect password";
-              } else {
-                this.admin = true;
-                this.validCode = true;
-              }
-            } else {
-              this.error = server_message;
+              if (!today.isBetween(loginStart, loginEnd)) {
+                this.error =
+                  "You cannot enter yet. The event will start on March 26, 2021";
+              } else this.error = server_message;
             }
-          },
-          // login done
-          onDone: () => (this.loading = false),
-        });
-      } else {
-        this.showTerms = true;
-        this.loading = false;
-      }
+          } else if (slug == "user_not_found") {
+            this.error = "Code doesn't exist";
+            this.incorrectModal = true;
+          } else if (slug == "please_login_with_a_password") {
+            if (this.admin) {
+              this.error = "Incorrect password";
+            } else {
+              this.admin = true;
+              this.validCode = true;
+            }
+          } else {
+            this.error = server_message;
+          }
+        },
+        // login done
+        onDone: () => (this.loading = false),
+      });
     },
 
     registerName() {
@@ -337,6 +310,7 @@ export default {
         });
     },
   },
+
   mounted() {
     tidio.mount();
   },
@@ -369,7 +343,7 @@ export default {
 // }
 
 #main-container {
-  background-image: url(~@/assets/login/login-bg-inactive.jpg) !important;
+  background-image: url(~@/assets/landing-bg.jpg) !important;
   // background: radial-gradient(#534624, #0e0c06);
   background-size: 100% 100%;
   height: 100%;
@@ -400,19 +374,19 @@ export default {
   //     }
   //   }
 
-  // #enter-btn {
-  //   padding: 3px;
-  //   background: -webkit-linear-gradient(
-  //     #db9f2c,
-  //     #470700,
-  //     #ffc85d,
-  //     #ffffff,
-  //     #ffc85d,
-  //     #470700,
-  //     #db9f2c
-  //   );
-  //   width: 40%;
-  // }
+  #enter-btn {
+    padding: 3px;
+    background: -webkit-linear-gradient(
+      #db9f2c,
+      #470700,
+      #ffc85d,
+      #ffffff,
+      #ffc85d,
+      #470700,
+      #db9f2c
+    );
+    width: 40%;
+  }
 
   //   .error-message {
   //     color: white;
@@ -436,7 +410,7 @@ export default {
 }
 
 .sub-container {
-  // border: 1px solid red;
+  //   border: 1px solid red;
   height: 100vh;
   //   align-items: flex-end;
   //   justify-content: flex-end;
@@ -448,7 +422,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  // border: 1px solid red;
+  //   border: 1px solid red;
   padding-bottom: 4%;
 }
 
@@ -474,23 +448,6 @@ input:focus {
 }
 
 #login-input-email::placeholder {
-  color: white !important;
-  font-family: "OratorStd";
-}
-
-#login-input-password {
-  margin-bottom: 10px;
-  border: 1px solid #99cccc;
-  background: #006064;
-  border-radius: 12px;
-  width: 25%;
-  height: 40px;
-  text-align: center;
-  color: white !important;
-  font-family: "OratorStd";
-}
-
-#login-input-password::placeholder {
   color: white !important;
   font-family: "OratorStd";
 }
