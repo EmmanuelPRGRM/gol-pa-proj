@@ -39,21 +39,21 @@ const router = new VueRouter({
 
 
 // route guard
-import store from '@/store'
-router.beforeEach((to, from, next) => {
-  const auth_token = store.getters['authentication/token'];
+// import store from '@/store'
+// router.beforeEach((to, from, next) => {
+  // const auth_token = store.getters['authentication/token'];
   
   // if ( to.name !== 'LandingPage' && !auth_token ) {
   //   store.dispatch('authentication/logout', {})
   //   next({ name: 'LandingPage' });
   // }
-  if ( to.name === 'Login' && auth_token ) {
-    // next({ name: 'Lobby' });
-  } else if (to.name === 'LoginAnimation' && auth_token) {
-    next({ name: 'Lobby' });
-  }
-  else {
-    next();
-  }
-})
+  // if ( to.name === 'Login' && auth_token ) {
+  //   // next({ name: 'Lobby' });
+  // } else if (to.name === 'LoginAnimation' && auth_token) {
+  //   next({ name: 'Lobby' });
+  // }
+  // else {
+  //   next();
+  // }
+// })
 export default router;
