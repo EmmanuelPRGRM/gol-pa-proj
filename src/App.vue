@@ -1,6 +1,10 @@
 <template>
   <v-app>
     <v-main>
+      <router-link to="/"></router-link>
+      <router-link to="/login-animation"></router-link>
+      <router-link to="/login"></router-link>
+      <router-link to="/lobby"></router-link>
       <router-view />
     </v-main>
     <orientation-blocker></orientation-blocker>
@@ -8,12 +12,11 @@
 </template>
 
 <script>
-
 export default {
-  name: 'App',
+  name: "App",
 
   components: {
-    OrientationBlocker: () => import('@/components/OrientationBlocker.vue'),
+    OrientationBlocker: () => import("@/components/OrientationBlocker.vue"),
   },
 
   data: () => ({
@@ -25,26 +28,19 @@ export default {
 <style>
 @font-face {
   font-family: "Azonix";
-  src: local("Azonix"),
-   url(./fonts/Azonix.otf) format("truetype");
+  src: local("Azonix"), url(./fonts/Azonix.otf) format("truetype");
 }
 @font-face {
   font-family: "OratorStd";
-  src: local("OratorStd"),
-   url(./fonts/OratorStd.otf) format("truetype");
+  src: local("OratorStd"), url(./fonts/OratorStd.otf) format("truetype");
 }
 @font-face {
   font-family: "oceanicdriftlaser";
   src: local("oceanicdriftlaser"),
-   url(./fonts/oceanicdriftlaser.ttf) format("truetype");
+    url(./fonts/oceanicdriftlaser.ttf) format("truetype");
 }
 
-orientation-blocker
-{
-    z-index: 1;
-}
-
-html {
-  overflow-y: auto;
+orientation-blocker {
+  z-index: 1;
 }
 </style>
