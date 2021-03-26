@@ -119,10 +119,30 @@ export default {
   color: #00ffff;
   font-family: "Azonix";
   font-size: 300%;
+  position: absolute;
+  text-align: center;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media only screen and (min-width: 568px) {
+    font-size: 100%;
+    padding: 10px;
+  }
+  @media only screen and (min-width: 640px) {
+    font-size: 100%;
+    padding: 100px;
+  }
+  @media only screen and (min-width: 731px) {
+    font-size: 100%;
+    padding: 100px;
+  }
+  @media only screen and (min-width: 1024px) {
+    font-size: 300%;
+    padding: 100px;
+  }
 }
 
 .link {
