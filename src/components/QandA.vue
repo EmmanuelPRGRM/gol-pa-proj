@@ -1,12 +1,17 @@
 <template>
   <div v-if="questionId" class="choicesContainer">
-    <div style="overflow-y: auto; height: 90%;">
-      <h4 style="margin-right: 6px;">{{activeQuestionTitle}}</h4>
-      <ul id="qaChoices" style="padding-left: 0px; margin-right: 6px;">
+    <div style="overflow-y: auto; height: 90%">
+      <h4 style="margin-right: 6px">{{ activeQuestionTitle }}</h4>
+      <ul id="qaChoices" style="padding-left: 0px; margin-right: 6px">
         <li v-for="choice in choices" :key="choice.id">
           <label>
-            <input type="radio" name="choices" v-model="choiceValue" :value="choice.id">
-            <span>{{choice.title}}</span>
+            <input
+              type="radio"
+              name="choices"
+              v-model="choiceValue"
+              :value="choice.id"
+            />
+            <span>{{ choice.title }}</span>
           </label>
         </li>
       </ul>
@@ -30,7 +35,7 @@ const QUESTION_TITLE = {
   11: "Trivia Mania 7",
   12: "Trivia Mania 8",
   13: "Trivia Mania 9",
-}
+};
 export default {
   name: "QandA",
   data: () => {
@@ -41,13 +46,13 @@ export default {
       activeQuestionTitle: "",
       groupId: null,
       axios: axios.create({
-        baseURL: 'https://event.fourello.com/api',
+        baseURL: "https://event.fourello.com/api",
         headers: {
-          'Accept': 'application/json',
-          'Authorization': "Bearer " + localStorage.getItem('auth_token')
-        }
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("auth_token"),
+        },
       }),
-    }
+    };
   },
 
   props: {
@@ -55,12 +60,12 @@ export default {
   },
 
   methods: {
-    getQuestion: function(id=null) {
+    getQuestion: function (id = null) {
       if (!this.questions) {
         this.fetchQuestions();
       }
 
-      let question = this.questions.filter(question => {
+      let question = this.questions.filter((question) => {
         return question.id === id;
       })[0];
 
@@ -70,7 +75,7 @@ export default {
       this.activeQuestionTitle = QUESTION_TITLE[this.groupId];
       this.choices = question.choices;
     },
-    submitAnswer: function() {
+    submitAnswer: function () {
       console.log("submit choice1", this.choiceValue);
       console.log("submit groupId", this.groupId);
       console.log("submit questionId", this.questionId);
@@ -80,34 +85,34 @@ export default {
         return;
       }
 
-      this.axios.post('/colpal/answer', {
-        "question_group_id": this.groupId,
-        "answers": [
-          {
-            "choice_id": this.choiceValue,
-            "qustion_id": this.questionId,
-          }
-        ],
-      })
-      .then(res => {
-        // localStorage.setItem('questions', JSON.stringify(res.data));
-        // this.questions = res.data;
-        console.log('questions', res.data); 
-      });
+      this.axios
+        .post("/colpal/answer", {
+          question_group_id: this.groupId,
+          answers: [
+            {
+              choice_id: this.choiceValue,
+              question_id: this.questionId,
+            },
+          ],
+        })
+        .then((res) => {
+          // localStorage.setItem('questions', JSON.stringify(res.data));
+          // this.questions = res.data;
+          console.log("questions", res.data);
+        });
     },
-    fetchQuestions: function() {
-      let localQuestions = localStorage.getItem('questions');
+    fetchQuestions: function () {
+      let localQuestions = localStorage.getItem("questions");
       if (!localQuestions) {
-        this.axios.get('/colpal/question?with_choices')
-        .then(res => {
-          localStorage.setItem('questions', JSON.stringify(res.data));
+        this.axios.get("/colpal/question?with_choices").then((res) => {
+          localStorage.setItem("questions", JSON.stringify(res.data));
           this.questions = res.data;
-          console.log('questions', res.data); 
+          console.log("questions", res.data);
         });
       } else {
         this.questions = JSON.parse(localQuestions);
       }
-    }
+    },
   },
 
   updated() {
@@ -121,73 +126,72 @@ export default {
     if (this.questionId) {
       this.getQuestion(this.questionId);
     }
-  }
+  },
 };
-
 </script>
 
 <style lang='scss'>
-  .choicesContainer {
-    font-size: 30px;
-    margin: -4px;
-    text-align: center;
-    color: white;
-    border: solid #75dfe3 4px;
-    min-height: 50%;
-    max-height: 77%;
-    height: 77%;
-    width: 106%;
-    border-right: none;
-    position: relative;
-  }
-  .choicesContainer input {
-    display: none;
-  }
+.choicesContainer {
+  font-size: 30px;
+  margin: -4px;
+  text-align: center;
+  color: white;
+  border: solid #75dfe3 4px;
+  min-height: 50%;
+  max-height: 77%;
+  height: 77%;
+  width: 106%;
+  border-right: none;
+  position: relative;
+}
+.choicesContainer input {
+  display: none;
+}
 
-  .choicesContainer {
-    li {
-      list-style: none;
-    }
+.choicesContainer {
+  li {
+    list-style: none;
   }
-  .choicesContainer label {
-    margin-right: 20px;
-    display: inline-block;
-    cursor: pointer;
-    width: 75%;
-    margin: 0px 0px 10px;
-  }
+}
+.choicesContainer label {
+  margin-right: 20px;
+  display: inline-block;
+  cursor: pointer;
+  width: 75%;
+  margin: 0px 0px 10px;
+}
 
-  .choicesContainer span {
-    min-height: 65px;
-    display: block;
-    background: rgb(202 149 46 / 55%);
-    padding: 5px 10px 5px 25px;
-    position: relative;
+.choicesContainer span {
+  min-height: 65px;
+  display: block;
+  background: rgb(202 149 46 / 55%);
+  padding: 5px 10px 5px 25px;
+  position: relative;
+  border-radius: 10px;
+  border: solid #b39658;
+  line-height: 50px;
+}
+.choicesContainer span:before {
+  display: none;
+}
+.choicesContainer input:checked + span {
+  background-color: #ca952e;
+  min-height: 65px;
+  border: solid #dea647;
+}
+
+.qaSubmitBtn {
+  width: 100%;
+  padding: 4px 20px 0px 0px;
+  float: right;
+  button {
+    width: 60%;
+    background: #f5ebeb;
+    color: black;
     border-radius: 10px;
-    border: solid #b39658;
-    line-height: 50px;
   }
-  .choicesContainer span:before {
-    display: none;
+  button:disabled {
+    background: #736e6e;
   }
-  .choicesContainer input:checked + span {
-    background-color: #ca952e;
-    min-height: 65px;
-    border: solid #dea647;
-  }
-
-  .qaSubmitBtn {
-    width: 100%;
-    padding: 4px 20px 0px 0px;
-    float: right;
-    button {
-      width: 60%;
-      background: #f5ebeb;
-      color: black;
-      border-radius: 10px;
-    }
-    button:disabled {
-      background: #736e6e;
-    }
-  }
+}
 </style>
