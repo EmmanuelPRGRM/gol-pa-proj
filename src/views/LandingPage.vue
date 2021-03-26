@@ -74,7 +74,7 @@
                 v-model="username"
                 v-on:keyup.enter="authenticate"
               />
-              <v-checkbox v-model="checkbox" color="white">
+              <v-checkbox color="white">
                 <template v-slot:label>
                   <div class="login-p-wrapper login-caption">
                     I ACCEPT THE
