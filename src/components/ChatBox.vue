@@ -1,27 +1,35 @@
 <template>
   <div style="height: 100%">
     <QandA :questionId="questionId" />
-    <div class="container  justify-center chatMainContainer" :class="[questionId ? 'halfView' : '' ]">
+    <div
+      class="container justify-center chatMainContainer"
+      :class="[questionId ? 'halfView' : '']"
+    >
       <div id="chat-container" class="" v-if="showMessages">
         <!-- chat item -->
-        <div v-for="(chat, index) of chats" 
-          :key="index" 
-          class="text-left  align-center chatLine">
+        <div
+          v-for="(chat, index) of chats"
+          :key="index"
+          class="text-left align-center chatLine"
+        >
           <!-- time -->
-          <div class="mx-1"><img src="~@/assets/avatar.png"></div>
+          <div class="mx-1"><img src="~@/assets/avatar.png" /></div>
           <!-- name -->
           <div class="mx-2">
-            <span class="text-decoration-underline" :class="{'owner': chat.project_user_identifier == userId}">
-              {{chat.project_user.data.first_name}}
+            <span
+              class="text-decoration-underline"
+              :class="{ owner: chat.project_user_identifier == userId }"
+            >
+              {{ chat.project_user.data.first_name }}
             </span>
           </div>
           <br />
           <!-- chat text -->
-          <div class="my-1">{{chat.message}}</div>
+          <div class="my-1">{{ chat.message }}</div>
           <br />
         </div>
       </div>
-      <div id="chat-field" class=" align-center messageInputContainer">
+      <div id="chat-field" class="align-center messageInputContainer">
         <!-- input text -->
         <v-text-field
           v-model="myMessage"
@@ -32,13 +40,8 @@
           placeholder="START TYPING..."
         ></v-text-field>
         <!-- enter chat btn -->
-        <v-btn
-          icon
-          class="ml-1 dmButton"
-          
-          @click="onSend()"
-        >
-          <img src="~@/assets/DMicon.png">
+        <v-btn icon class="ml-1 dmButton" @click="onSend()">
+          <img src="~@/assets/DMicon.png" />
         </v-btn>
       </div>
     </div>
@@ -50,7 +53,7 @@ import moment from "moment";
 import QandA from "@/components/QandA.vue"; // @ is an alias to /src
 
 export default {
-  name: 'ChatBox',
+  name: "ChatBox",
   components: {
     QandA,
   },
@@ -58,32 +61,41 @@ export default {
   data() {
     return {
       showMessages: false,
-      myMessage: '',
+      myMessage: "",
       chats: [],
       chatQueue: [],
-      lastChatSlug: '',
+      lastChatSlug: "",
       interval: null,
       intervalTimeout: 500,
       timeout: null,
       sending: false,
       userId: null,
       questionId: null,
-    }
+    };
   },
 
   methods: {
     displayChat() {
-      this.showMessages = true
+      this.showMessages = true;
       if (this.chatQueue.length > 0) {
-        var chat = this.chatQueue.shift()
-        console.log('queue: ', this.chatQueue.length)
-        console.log('new chat: ',chat)
-        console.log('existing: ', this.chats.find( data => data.slug == chat.slug ))
+        var chat = this.chatQueue.shift();
+        console.log("queue: ", this.chatQueue.length);
+        console.log("new chat: ", chat);
+        console.log(
+          "existing: ",
+          this.chats.find((data) => data.slug == chat.slug)
+        );
         // if()
-        if (!this.chats.find(data => { return data.slug == chat.slug})) {
-          let tempMsg = '';
+        if (
+          !this.chats.find((data) => {
+            return data.slug == chat.slug;
+          })
+        ) {
+          let tempMsg = "";
           try {
-            let { type="chat", questionId=null, message=""} = JSON.parse(chat.message);
+            let { type = "chat", questionId = null, message = "" } = JSON.parse(
+              chat.message
+            );
             if (type === "quiz" && questionId) {
               //publish question
               this.questionId = questionId;
@@ -92,200 +104,242 @@ export default {
               this.questionId = null;
               return;
             } else {
-              tempMsg = message
+              tempMsg = message;
               chat.message = tempMsg;
               this.chats.push(chat);
             }
-          } catch(e) {
+          } catch (e) {
             this.chats.push(chat);
           }
         }
       }
       if (this.chatQueue.length < 2) {
-        this.fetchChat()
+        this.fetchChat();
       }
     },
-    
-    fetchChat(isFirst = false){
-        var url = 'https://chat-api-production.fourello.com/api/colpal/chat/colpal_room1'
-        if (isFirst) {
-          url = url + '?fetch_latest'
-          let config = {
-            headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
-          };
-          this.$http.get(url, config)
-          .then(res => {
-            let data = res.data.data
-            console.log(data)
+
+    fetchChat(isFirst = false) {
+      var url =
+        "https://chat-api-production.fourello.com/api/colpal/chat/colpal_room1";
+      if (isFirst) {
+        url = url + "?fetch_latest";
+        let config = {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
+        };
+        this.$http
+          .get(url, config)
+          .then((res) => {
+            let data = res.data.data;
+            console.log(data);
 
             if (data.length != 0) {
-              let lastDataSlug = data.slice(-1)[0].slug
-              if(data.length > 0) {
-                  this.lastChatSlug = lastDataSlug
+              let lastDataSlug = data.slice(-1)[0].slug;
+              if (data.length > 0) {
+                this.lastChatSlug = lastDataSlug;
               }
             }
 
-            if(isFirst) {
+            if (isFirst) {
               let tempData = [];
-              for(let x of data) {
+              for (let x of data) {
                 // for colpal event only = start
                 // let parseMessage;
                 // /**
-                //   quiz publish data format: 
+                //   quiz publish data format:
                 //   {
                 //     "type": "quiz",
                 //     "questionId": Integer(id)
                 //   }
                 // */
-                  try {
-                    let { type="chat", questionId=null, message=""} = JSON.parse(x.message);
-                    if (type === "quiz" && questionId) {
-                      //publish question
-                      this.questionId = questionId;
-                      console.log("skipped", x.message);
-                      continue;
-                    } else if (type === "quiz" && questionId === null) {
-                      this.questionId = null;
-                      continue;
-                    } else {
-                      x.message = message;
-                      tempData.push(x);
-                    }
-                  } catch(e) {
-                      tempData.push(x);
+                try {
+                  let {
+                    type = "chat",
+                    questionId = null,
+                    message = "",
+                  } = JSON.parse(x.message);
+                  if (type === "quiz" && questionId) {
+                    //publish question
+                    this.questionId = questionId;
+                    console.log("skipped", x.message);
+                    continue;
+                  } else if (type === "quiz" && questionId === null) {
+                    this.questionId = null;
+                    continue;
+                  } else {
+                    x.message = message;
+                    tempData.push(x);
                   }
+                } catch (e) {
+                  tempData.push(x);
+                }
 
                 // end
               }
               this.chats = tempData;
             } else {
-              for(let x of data) {
+              for (let x of data) {
                 // for colpal event only = start
                 // let parseMessage;
                 // /**
-                //   quiz publish data format: 
+                //   quiz publish data format:
                 //   {
                 //     "type": "quiz",
                 //     "questionId": Integer(id)
                 //   }
                 // */
-                  try {
-                    let { type="chat", questionId=null, message=""} = JSON.parse(x.message);
-                    if (type === "quiz" && questionId) {
-                      //publish question
-                      this.questionId = questionId;
-                      continue;
-                    } else if (type === "quiz" && questionId === null) {
-                      this.questionId = null;
-                      continue;
-                    } else {
-                      x.message = message;
-                      this.chatQueue.push(x);
-                    }
-                  } catch(e) {
-                      this.chatQueue.push(x);
+                try {
+                  let {
+                    type = "chat",
+                    questionId = null,
+                    message = "",
+                  } = JSON.parse(x.message);
+                  if (type === "quiz" && questionId) {
+                    //publish question
+                    this.questionId = questionId;
+                    continue;
+                  } else if (type === "quiz" && questionId === null) {
+                    this.questionId = null;
+                    continue;
+                  } else {
+                    x.message = message;
+                    this.chatQueue.push(x);
                   }
+                } catch (e) {
+                  this.chatQueue.push(x);
+                }
 
                 // end
               }
             }
           })
-          .catch(err => {
-            console.log(err)
+          .catch((err) => {
+            console.log("AWUT")
+            console.log(err.response.status);
+            if (err.response.status == 401) {
+              localStorage.clear();
+              console.log("localStorage cleared");
+              this.$router.push({ name: "Login" });
+              
+              
+            }
           })
-          .then(()=> {
-            clearTimeout(this.timeout)
+          .then(() => {
+            clearTimeout(this.timeout);
             this.timeout = setTimeout(() => {
-                this.displayChat() 
-            }, this.intervalTimeout * ( 1 + this.chatQueue.length ));
-          })
-        } else {
-          if(this.lastChatSlug != '') {
-            url = url + '?slug=' + this.lastChatSlug
-            let config = {
-                headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
-            };
-            this.$http.get(url, config)
-            .then(res => {
-                let data = res.data.data
-                if (data.length != 0) {
-                    let lastDataSlug = data.slice(-1)[0].slug
-                    if(data.length > 0) {
-                        this.lastChatSlug = lastDataSlug
-                    }
+              this.displayChat();
+            }, this.intervalTimeout * (1 + this.chatQueue.length));
+          });
+      } else {
+        if (this.lastChatSlug != "") {
+          url = url + "?slug=" + this.lastChatSlug;
+          let config = {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+            },
+          };
+          this.$http
+            .get(url, config)
+            .then((res) => {
+              let data = res.data.data;
+              if (data.length != 0) {
+                let lastDataSlug = data.slice(-1)[0].slug;
+                if (data.length > 0) {
+                  this.lastChatSlug = lastDataSlug;
                 }
+              }
 
-                if(isFirst) {
-                    let tempData = [];
-                    for(let x of data) {
-                      // for colpal event only = start
-                      // let parseMessage;
-                      // /**
-                      //   quiz publish data format: 
-                      //   {
-                      //     "type": "quiz",
-                      //     "questionId": Integer(id)
-                      //   }
-                      // */
-                        let {type="chat", questionId=null, message=""} = JSON.parse(x.message);
-                        if (type === "quiz" && questionId) {
-                          this.questionId = questionId;
-                          //publish question
-                          continue;
-                        } else if (type === "quiz" && questionId === null) {
-                          this.questionId = null;
-                          continue;
-                        } else {
-                          x.message = message;
-                          tempData.push(x);
-                        }
-                      
-                      // end
-                    }
-                    this.chats = tempData;
-                } else {
-                    for(let x of data) {
-                      let {type="chat", questionId=null, message=""} = JSON.parse(x.message);
-                      
-                      if (type === "quiz" && questionId) {
-                        //publish question
-                        this.questionId = questionId;
-                        continue;
-                      } else if (type === "quiz" && questionId === null) {
-                        this.questionId = null;
-                        continue;
-                      } else {
-                        x.message = message;
-                        this.chatQueue.push(x);
-                      }
-                        // this.chatQueue.push(x)
-                        // console.log('queue: ',this.chatQueue)
-                    }
+              if (isFirst) {
+                let tempData = [];
+                for (let x of data) {
+                  // for colpal event only = start
+                  // let parseMessage;
+                  // /**
+                  //   quiz publish data format:
+                  //   {
+                  //     "type": "quiz",
+                  //     "questionId": Integer(id)
+                  //   }
+                  // */
+                  let {
+                    type = "chat",
+                    questionId = null,
+                    message = "",
+                  } = JSON.parse(x.message);
+                  if (type === "quiz" && questionId) {
+                    this.questionId = questionId;
+                    //publish question
+                    continue;
+                  } else if (type === "quiz" && questionId === null) {
+                    this.questionId = null;
+                    continue;
+                  } else {
+                    x.message = message;
+                    tempData.push(x);
+                  }
+
+                  // end
                 }
-                // let content = document.querySelector('.chat-room .content .chat-item')
-                // console.log('content height: ' +( content.offsetHeight + 30))
+                this.chats = tempData;
+              } else {
+                for (let x of data) {
+                  let {
+                    type = "chat",
+                    questionId = null,
+                    message = "",
+                  } = JSON.parse(x.message);
+
+                  if (type === "quiz" && questionId) {
+                    //publish question
+                    this.questionId = questionId;
+                    continue;
+                  } else if (type === "quiz" && questionId === null) {
+                    this.questionId = null;
+                    continue;
+                  } else {
+                    x.message = message;
+                    this.chatQueue.push(x);
+                  }
+                  // this.chatQueue.push(x)
+                  // console.log('queue: ',this.chatQueue)
+                }
+              }
+              // let content = document.querySelector('.chat-room .content .chat-item')
+              // console.log('content height: ' +( content.offsetHeight + 30))
             })
-            .catch(err => {
-                console.log(err)
+            .catch((err) => {
+
+              console.log(err);
+                 if (err.response.status == 401) {
+              localStorage.clear();
+              console.log("localStorage cleared");
+              return this.$router.go({ name: "Login" });
+              
+              
+            }
             })
-            .then(()=> {
-                clearTimeout(this.timeout)
-                this.timeout = setTimeout(() => {
+            .then(() => {
+              clearTimeout(this.timeout);
+              this.timeout = setTimeout(() => {
                 //    console.log(this.chatQueue.length)
-                    this.displayChat() 
-                }, this.intervalTimeout * ( 1 + this.chatQueue.length ));
-            })
-          } else {
-            this.fetchChat(true)
-          }
+                this.displayChat();
+              }, this.intervalTimeout * (1 + this.chatQueue.length));
+            });
+        } else {
+          this.fetchChat(true);
         }
-
+      }
     },
 
     onSend() {
-      var url = 'https://chat-api-production.fourello.com/api/colpal/chat/colpal_room1'
+      var url =
+        "https://chat-api-production.fourello.com/api/colpal/chat/colpal_room1";
       let config = {
-        headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}`, Accept: 'application/json' }
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          Accept: "application/json",
+        },
       };
 
       // for colpal event only = start
@@ -298,62 +352,68 @@ export default {
         }
       */
       try {
-        let {type, questionId} = JSON.parse(this.myMessage);
-        let tempMsg = '';
+        let { type, questionId } = JSON.parse(this.myMessage);
+        let tempMsg = "";
         if (type === "quiz" && (questionId || questionId === null)) {
           //publish question
           tempMsg = '{"type":"' + type + `","questionId":` + questionId + `}`;
         } else {
-          tempMsg = '{"type":"chat","message":"'+ this.myMessage + `"}`;
+          tempMsg = '{"type":"chat","message":"' + this.myMessage + `"}`;
         }
         parseMessage = tempMsg;
-      } catch(e) {
-        parseMessage = '{"type":"chat","message":"'+ this.myMessage + `"}`;
+      } catch (e) {
+        parseMessage = '{"type":"chat","message":"' + this.myMessage + `"}`;
       }
 
       // end
 
       let payload = {
         message: parseMessage,
-      }
-      this.sending = true
-      this.$http.post(url, payload, config)
-      .then(res => {
-        this.sending = true
-        var data = res.data.data
-        data.project_user = {
-            data: this.$store.getters['authentication/user']
-        }
-        // console.log(res)
-        this.chatQueue.push(res.data.data)
-        this.displayChat()
-        this.myMessage = ''
-        // this.fetchChat(true)
-        if (!localStorage.getItem('first-chat-room1')) {
-          localStorage.setItem('first-chat-room1', true)
-          this.$store.dispatch('awit/dot', { main_key: 'networking', sub_key: 'room1', data_action: 'first chat' })
-        }
-      })
-      .catch(err => {
-        console.log(err)
-        if (err.response.status === 422)
-          alert(err.response.data.message)
-        else
-          alert('There was a problem with the message you sent. Try again later')
-      })
-      .then( () => {
-        this.sending = false
-      } )
+      };
+      this.sending = true;
+      this.$http
+        .post(url, payload, config)
+        .then((res) => {
+          this.sending = true;
+          var data = res.data.data;
+          data.project_user = {
+            data: this.$store.getters["authentication/user"],
+          };
+          // console.log(res)
+          this.chatQueue.push(res.data.data);
+          this.displayChat();
+          this.myMessage = "";
+          // this.fetchChat(true)
+          if (!localStorage.getItem("first-chat-room1")) {
+            localStorage.setItem("first-chat-room1", true);
+            this.$store.dispatch("awit/dot", {
+              main_key: "networking",
+              sub_key: "room1",
+              data_action: "first chat",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response.status === 422) alert(err.response.data.message);
+          else
+            alert(
+              "There was a problem with the message you sent. Try again later"
+            );
+        })
+        .then(() => {
+          this.sending = false;
+        });
     },
 
     parseTime(date) {
-      return moment(date).format('HH:mm:ss')
+      return moment(date).format("HH:mm:ss");
     },
   },
 
   mounted() {
-    this.fetchChat()
-    var user = localStorage.getItem('user')
+    this.fetchChat();
+    var user = localStorage.getItem("user");
     this.userId = JSON.parse(user).id;
     // test data only
     // this.chats = [
@@ -378,7 +438,7 @@ export default {
     //     chat: 'Test test'
     //   },
     // ]
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -429,7 +489,6 @@ export default {
   min-height: 20%;
   height: 20%;
 }
-
 </style>
 
 <style lang="scss">
@@ -452,8 +511,7 @@ export default {
     height: 8%;
     display: inline;
 
-
-    >.v-input__control {
+    > .v-input__control {
       width: 80%;
       display: inline;
 
@@ -465,7 +523,7 @@ export default {
         border-style: none !important;
       }
 
-      >.v-input__slot {
+      > .v-input__slot {
         width: 80%;
         display: inline;
         > .v-text-field__slot {
