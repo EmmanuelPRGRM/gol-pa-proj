@@ -190,6 +190,8 @@ import VLounge from "../components/VLounge.vue";
 import WelcomeModal from "../components/WelcomeModal.vue";
 import GameFrame from "../components/GameFrame.vue";
 import LeaderboardFrame from "../components/LeaderboardFrame.vue";
+import tidio from "@/helpers/tidio.js";
+
 
 export default {
   components: {
@@ -294,6 +296,7 @@ export default {
     let { choices = [], questionId = null } = this.getPublishedChoices();
     this.choices = choices;
     this.questionId = questionId;
+    tidio.mount();
   },
 };
 </script>

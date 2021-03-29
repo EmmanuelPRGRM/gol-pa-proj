@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import tidio from '@/helpers/tidio'
+
 import Player from '@vimeo/player'
 
 export default {
@@ -168,7 +168,7 @@ export default {
   mounted () {
     // if (localStorage.getItem('lobby_transitioned')) { this.$router.push({ name: 'Login' }) }
 
-    tidio.unmount()
+ 
     this.initializeVimeoPlayer()
     this.loadVimeoVideo(524849184)
     // this.loadVimeoVideo(463829285)

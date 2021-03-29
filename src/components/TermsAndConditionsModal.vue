@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="showPrompt" scrollable max-width="700px">
+    <v-dialog v-model="showPrompt"  max-width="700px"  @click:outside="closeModal">
       <v-card class="card">
         <v-card-text style="height: 500px">
           <div class="terms-and-conditions-wrapper">
@@ -11,7 +11,6 @@
             <br />
 
             <strong>Terms and Conditions</strong><br />
-
             By accessing this site, you acknowledge and agree to all of our
             terms, conditions, and privacy policies below, and otherwise
             contained on or referenced in this site (the "Agreement"). If you do
@@ -225,8 +224,7 @@ export default {
   },
   methods: {
     closeModal: function () {
-      this.showPrompt = false;
-      window.location.reload();
+      this.$emit('hide')
     },
     agree: function () {
       this.checkbox = true;
@@ -252,8 +250,15 @@ export default {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  overflow-y: hidden;
-  padding-bottom: 40px;
+  overflow-y: hidden!important;
+}
+.terms-and-conditions-wrapper ::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.terms-and-conditions-wrapper   {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 .terms-and-conditions-wrapper {
   height: inherit;
@@ -263,11 +268,15 @@ export default {
   padding-left: 140px;
   padding-right: 100px;
   font-size: 11px;
+  overflow-y: scroll;
   /* padding: 50px; */
   /* border: 1px solid red; */
   /* overflow-y: hidden; */
 }
 .close-btn:hover {
   cursor: pointer;
+}
+::v-deep .v-card > *:last-child:not(.v-btn):not(.v-chip){
+  overflow: hidden !important;
 }
 </style>

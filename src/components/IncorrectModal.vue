@@ -30,7 +30,7 @@ export default {
   methods: {
     closeModal: function () {
       this.showPrompt = false;
-      window.location.reload();
+        this.$emit('hide')
     },
   },
   mounted() {},

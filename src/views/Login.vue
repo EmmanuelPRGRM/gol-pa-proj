@@ -1,8 +1,11 @@
 <template>
   <v-container fluid id="main-container" class="pa-0 ma-0">
     <!-- <lobby-transition v-if="transition"></lobby-transition> -->
-    <incorrect-modal v-if="incorrectModal"></incorrect-modal>
-    <terms-and-conditions-modal v-if="showTerms"></terms-and-conditions-modal>
+    <incorrect-modal v-if="incorrectModal" @hide="close"></incorrect-modal>
+    <terms-and-conditions-modal
+      v-if="showTerms"
+      @hide="close"
+    ></terms-and-conditions-modal>
     <v-overlay absolute z-index="0" opacity="1">
       <v-img
         :src="bgDark"
@@ -74,17 +77,30 @@
                 v-model="username"
                 v-on:keyup.enter="authenticate"
               />
-              <v-checkbox v-model="checkbox" color="white">
+              <!-- <v-checkbox v-model="checkbox" color="white">
                 <template v-slot:label>
                   <div class="login-p-wrapper login-caption">
-                    I ACCEPT THE
-                    <a class="login-url text-decoration-underline"
-                      >TERMS AND CONDITIONS</a
-                    >
-                    OF COLGATE-PALMOLIVE PHILIPPINES.
+                    <div class=" ">
+                      I ACCEPT THE
+                      <a
+                        class="login-url text-decoration-underline"
+                        @click="showTermsCondition"
+                        >TERMS AND CONDITIONS</a
+                      >
+                      OF COLGATE-PALMOLIVE PHILIPPINES.
+                    </div>
                   </div>
                 </template>
-              </v-checkbox>
+              </v-checkbox> -->
+
+              <div  class="login-p-wrapper login-caption mb-15">
+                <input type="checkbox" v-bind="checkbox" v-model="checkbox">
+<span class="ml-2 mt-15">I ACCEPT THE
+           <a v-on:click="showTermsCondition">
+                   TERMS AND CONDITIONS
+           </a> OF COLGATE-PALMOLIVE PHILIPPINES.
+</span>
+              </div>
               <v-slide-x-transition>
                 <h4 v-show="!!error" class="error-message mt-3 text-center">
                   {{ error }}
@@ -230,6 +246,13 @@ export default {
   },
 
   methods: {
+    showTermsCondition() {
+      this.showTerms = true;
+    },
+    close() {
+      this.showTerms = false;
+      this.incorrectModal = false;
+    },
     // validateCode() {
     //   this.validCode = true
     // },
@@ -237,7 +260,12 @@ export default {
       // post request
       this.loading = true;
       this.error = null;
-
+      console.log("AEE");
+      if (this.username ===null  ){
+        this.loading = false
+         this.incorrectModal = true;
+         console.log("WWW")
+      }
       if (this.checkbox) {
         this.$store.dispatch("authentication/login", {
           // credentials
@@ -264,7 +292,7 @@ export default {
           onError: (error) => {
             var server_message = null;
             var slug = null;
-
+             this.loading = false
             if (typeof error.response.data === "object") {
               server_message = error.response.data.message;
               slug = error.response.data.slug;
@@ -338,12 +366,10 @@ export default {
         });
     },
   },
-  mounted() {
-    tidio.mount();
-  },
-  beforeDestroy() {
-    tidio.unmount();
-  },
+  mounted(){
+        tidio.mount();
+  }
+ 
 };
 </script>
 
@@ -376,6 +402,7 @@ export default {
   height: 100%;
   width: 100vw;
   overflow: hidden !important;
+  position: fixed;
 
   //   #label {
   //     width:100%;
