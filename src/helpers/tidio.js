@@ -1,7 +1,7 @@
 // //code.tidio.co/vrncdyzi2j390sjqvyfexbd5sk2wmhxn.js
 
 //code.tidio.co/3bpce2gh7vekgqllx9zwtwacjjjgjjxk.js
-var tideoSrc = '//code.tidio.co/m7fdsygwh8xi19bxk90kzbgiajtap9fs.js'
+var tideoSrc = '//code.tidio.co/3bpce2gh7vekgqllx9zwtwacjjjgjjxk.js'
 
 export default {
   mount() {
